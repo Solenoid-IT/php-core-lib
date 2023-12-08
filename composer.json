@@ -1,0 +1,36 @@
+{
+    "name": "solenoid/core-lib",
+    "description": "Core framework library",
+    "type": "library",
+    "keywords": ["core","http","cli","framework"],
+    "homepage": "https://github.com/Solenoid-IT/php-core-lib",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pier Niccolò Giannelli",
+            "email": "pierniccologiannelli@gmail.com",
+            "homepage": "https://www.solenoid.it",
+            "role": "Full Stack Web Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "eftec/bladeone": "^4.9",
+        "solenoid/http": "^1.0.0",
+        "solenoid/tasker-lib": "^1.0.0",
+        "solenoid/system": "^1.0.0",
+        "solenoid/perf": "^1.0.0",
+        "solenoid/html": "^1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "eftec\\bladeone\\": "lib",
+            "Solenoid\\Core\\": "src",
+            "Solenoid\\HTTP\\": "src",
+            "Solenoid\\Tasker\\": "src",
+            "Solenoid\\System\\": "src",
+            "Solenoid\\Perf\\": "src",
+            "Solenoid\\HTML\\": "src"
+        }
+    }
+}
