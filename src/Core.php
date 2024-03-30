@@ -33,6 +33,7 @@ class Core
 
     public static string                                   $context;
 
+    public static string                                    $app_id;
     public static string                               $app_version;
 
     public static string                                      $host;
@@ -84,6 +85,7 @@ class Core
         self::$request     = $request ? $request : null;
         self::$context     = self::$request ? 'http' : 'cli';
         self::$basedir     = $config['basedir'];
+        self::$app_id      = $config['app_id'];
         self::$app_version = $config['app_version'];
 
 
