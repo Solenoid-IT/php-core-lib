@@ -100,18 +100,34 @@ class Router
 
         foreach ($path_list as $path)
         {// Processing each entry
-            // (Getting the value)
-            $path_args = self::fetch_path_args( $request::$path, $path );
+            if ( $path[0] === '/' && $path[ strlen($path) - 1 ] === '/' )
+            {// (Path is a regex)
+                if ( preg_match( $path, $request::$path, $matches ) === 1 )
+                {// Match OK
+                    // (Getting the value)
+                    self::$core::$path_args = $matches;
 
-            if ( $path_args )
-            {// Value found
+
+
+                    // Returning the value
+                    return $routes[ $path ][ $request::$method ] ?? false;
+                }
+            }
+            else
+            {// (Path is a normal string)
                 // (Getting the value)
-                self::$core::$path_args = $path_args;
+                $path_args = self::fetch_path_args( $request::$path, $path );
+
+                if ( $path_args )
+                {// Value found
+                    // (Getting the value)
+                    self::$core::$path_args = $path_args;
 
 
 
-                // Returning the value
-                return $routes[ $path ][ $request::$method ] ?? false;
+                    // Returning the value
+                    return $routes[ $path ][ $request::$method ] ?? false;
+                }
             }
         }
 
