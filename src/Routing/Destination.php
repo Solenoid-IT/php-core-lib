@@ -54,6 +54,7 @@ class Destination
         // (Creating a Destination)
         $destination = new Destination();
 
+        // (Getting the values)
         $destination->controller = $controller;
         $destination->action     = $action;
 
@@ -118,7 +119,7 @@ class Destination
     public function get_type ()
     {
         // Returning the value
-        return isset( $this->function ) ? 'defined' : 'linked';
+        return isset( $this->function ) ? 'define' : 'link';
     }
 
 
@@ -127,7 +128,7 @@ class Destination
     public function __toString ()
     {
         // Returning the value
-        return $this->get_type() === 'defined' ? 'defined' : "$this->controller::$this->action";
+        return $this->get_type() === 'define' ? 'define' : "$this->controller::$this->action";
     }
 }
 

@@ -186,7 +186,7 @@ class Router
                 {// Value is true
                     switch ( $destination->get_type() )
                     {
-                        case 'defined':
+                        case 'define':
                             // (Calling the function)
                             $response = ( $destination->function )( self::$core );
                         break;
