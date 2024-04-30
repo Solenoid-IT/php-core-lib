@@ -184,17 +184,26 @@ class Router
 
                 if ( $continue )
                 {// Value is true
-                    // (Getting the values)
-                    $controller = $destination->controller;
-                    $action     = $destination->action;
+                    switch ( $destination->get_type() )
+                    {
+                        case 'defined':
+                            // (Calling the function)
+                            $response = ( $destination->function )( self::$core );
+                        break;
 
-                    $instance   = new $controller( self::$core );
+                        case 'link':
+                            // (Getting the values)
+                            $controller = $destination->controller;
+                            $action     = $destination->action;
+
+                            $instance   = new $controller( self::$core );
 
 
 
-                    // (Calling the user function by array)
-                    #$response = call_user_func_array([ $instance , $action ], [ $request ]);
-                    $response = call_user_func_array( [ $instance , $action ], [  ] );
+                            // (Calling the user function by array)
+                            $response = call_user_func_array( [ $instance , $action ], [  ] );
+                        break;
+                    }
 
                     if ( $response !== null )
                     {// (Controller method returns something)

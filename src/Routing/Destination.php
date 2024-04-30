@@ -12,6 +12,8 @@ use \Solenoid\Core\Core;
 
 class Destination
 {
+    public                 $function;
+
     public string        $controller;
     public string            $action;
 
@@ -22,12 +24,8 @@ class Destination
 
 
     # Returns [self]
-    public function __construct (string $controller, string $action)
+    public function __construct ()
     {
-        // (Getting the values)
-        $this->controller = $controller;
-        $this->action     = $action;
-
         // (Setting the values)
         $this->middleware_groups = [];
         $this->tags              = [];
@@ -36,10 +34,33 @@ class Destination
 
 
     # Returns [Destination]
-    public static function create (string $controller, string $action)
+    public static function define (callable $function)
     {
+        // (Creating a Destination)
+        $destination = new Destination();
+
+        // (Getting the value)
+        $destination->function = $function;
+
+
+
         // Returning the value
-        return new Destination( $controller, $action );
+        return $destination;
+    }
+
+    # Returns [Destination]
+    public static function link (string $controller, string $action)
+    {
+        // (Creating a Destination)
+        $destination = new Destination();
+
+        $destination->controller = $controller;
+        $destination->action     = $action;
+
+
+
+        // Returning the value
+        return $destination;
     }
 
 
@@ -94,10 +115,19 @@ class Destination
 
 
     # Returns [string]
+    public function get_type ()
+    {
+        // Returning the value
+        return isset( $this->function ) ? 'defined' : 'linked';
+    }
+
+
+
+    # Returns [string]
     public function __toString ()
     {
         // Returning the value
-        return "$this->controller::$this->action";
+        return $this->get_type() === 'defined' ? 'defined' : "$this->controller::$this->action";
     }
 }
 
