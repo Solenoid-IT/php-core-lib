@@ -127,8 +127,8 @@ class Core
         $loggers = [];
 
         // (Getting the values)
-        $loggers['error'] = Logger::create( $config['logs'][ self::$context ]['error'] );
-        $loggers['call']  = Logger::create( $config['logs'][ self::$context ]['call'] );
+        $loggers['error'] = Logger::create( $config['logs'] . '/' . self::$context . '/error.log' );
+        $loggers['call']  = Logger::create( $config['logs'] . '/' . self::$context . '/call.log' );
 
 
 
