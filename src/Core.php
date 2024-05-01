@@ -36,6 +36,8 @@ class Core
     public static string                                    $app_id;
     public static string                               $app_version;
 
+    public static array                                $app_history;
+
     public static string                                      $host;
 
     public static string                                  $env_type;
@@ -86,12 +88,13 @@ class Core
         self::$context     = self::$request ? 'http' : 'cli';
         self::$basedir     = $config['basedir'];
         self::$app_id      = $config['app_id'];
-        self::$app_version = $config['app_version'];
+        self::$app_version = array_keys( $config['app_history'] )[0];
+        self::$app_history = $config['app_history'];
 
 
 
         // (Getting the value)
-        self::$host = self::get_host();
+        self::$host = $config['host'];
 
 
 
