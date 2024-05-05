@@ -38,6 +38,8 @@ class Core
 
     public static array                                $app_history;
 
+    public static array                                $credentials;
+
     public static string                                      $host;
 
     public static string                                  $env_type;
@@ -90,6 +92,7 @@ class Core
         self::$app_id      = $config['app_id'];
         self::$app_version = array_keys( $config['app_history'] )[0];
         self::$app_history = $config['app_history'];
+        self::$credentials = $config['credentials'];
 
 
 
