@@ -33,10 +33,10 @@ class Core
 
     public static string                                   $context;
 
+    public static string                               $app_history;
+
     public static string                                    $app_id;
     public static string                               $app_version;
-
-    public static string                               $app_history;
 
     public static string                               $credentials;
 
@@ -89,9 +89,9 @@ class Core
         self::$request     = $request ? $request : null;
         self::$context     = self::$request ? 'http' : 'cli';
         self::$basedir     = $config['basedir'];
-        self::$app_id      = $config['app_id'];
-        self::$app_version = array_keys( $config['app_history'] )[0];
         self::$app_history = $config['app_history'];
+        self::$app_id      = $config['app_id'];
+        self::$app_version = array_keys( self::fetch_app_history() )[0];
         self::$credentials = $config['credentials'];
 
 
