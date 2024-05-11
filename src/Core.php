@@ -36,9 +36,9 @@ class Core
     public static string                                    $app_id;
     public static string                               $app_version;
 
-    public static array                                $app_history;
+    public static string                               $app_history;
 
-    public static array                                $credentials;
+    public static string                               $credentials;
 
     public static string                                      $host;
 
@@ -321,6 +321,22 @@ class Core
     {
         // (Setting the ini)
         ini_set( 'display_errors', ( $state ? 1 : 0 ) );
+    }
+
+
+
+    # Returns [assoc]
+    public static function fetch_app_history ()
+    {
+        // Returning the value
+        return json_decode( file_get_contents( self::$app_history ), true );
+    }
+
+    # Returns [assoc]
+    public static function fetch_credentials ()
+    {
+        // Returning the value
+        return json_decode( file_get_contents( self::$credentials ), true );
     }
 
 
