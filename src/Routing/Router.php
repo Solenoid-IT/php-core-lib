@@ -6,245 +6,151 @@ namespace Solenoid\Core\Routing;
 
 
 
-use \Solenoid\Core\Core;
-use \Solenoid\Perf\Analyzer;
+use \Solenoid\Core\Routing\Target;
 
 
 
 class Router
 {
-    private static Core $core;
+    public array   $routes;
+    public ?Target $fallback_target;
 
 
 
     # Returns [self]
-    public function __construct (Core &$core)
+    public function __construct (array $routes, ?Target $fallback_target = null)
     {
         // (Getting the value)
-        self::$core = $core;
+        $this->routes = $routes;
+
+
+
+        if ( !$fallback_target )
+        {// Value not found
+            // (Getting the value)
+            $fallback_target = Target::define( function () { http_response_code(404); } );
+        }
+
+        // (Getting the value)
+        $this->fallback_target = $fallback_target;
     }
 
-    # Returns [Router]
-    public static function create (Core &$core)
-    {
-        // Returning the value
-        return new Router( $core );
-    }
 
 
-
-    # Returns [assoc|false]
-    public static function fetch_path_args (string $client_path, string $route_path)
+    # Returns [Target|false]
+    public function resolve (string $route, string $method)
     {
         // (Setting the value)
         $args = [];
 
 
 
-        // (Getting the values)
-        $client_path_parts = explode( '/', $client_path );
-        $route_path_parts  = explode( '/', $route_path );
-
-
-
-        if ( count( $client_path_parts ) !== count( $route_path_parts ) )
-        {// Match failed
-            // Returning the value
-            return false;
-        }
-
-
-
-        for ($i = 0; $i < count( $route_path_parts ); $i++)
-        {// Iterating each index
-            // (Getting the values)
-            $client_path_part = $client_path_parts[ $i ];
-            $route_path_part  = $route_path_parts[ $i ];
-
-
-
-            if ( $client_path_part !== $route_path_part )
-            {// Match failed
-                if ( preg_match('/\[\ ([^\ ]+)\ \]/', $route_path_part, $matches ) === 0 )
-                {// (Regex does not match the text)
-                    // Returning the value
-                    return false;
-                }
-
-
-
-                // (Getting the value)
-                $args[ $matches[1] ] = $client_path_part;
-            }
-        }
-
-
-
-        // Returning the value
-        return $args;
-    }
-
-
-
-    # Returns [Destination|false]
-    public function fetch_destination ()
-    {
-        // (Getting the values)
-        $request = self::$core::$request;
-        $routes  = self::$core::$routes;
-
-
-
         // (Getting the value)
-        $path_list = array_keys($routes);
+        $target = $this->routes[$route][$method] ?? false;
 
-        foreach ($path_list as $path)
-        {// Processing each entry
-            if ( $path[0] === '/' && $path[ strlen($path) - 1 ] === '/' )
-            {// (Path is a regex)
-                if ( preg_match( $path, $request::$path, $matches ) === 1 )
-                {// Match OK
-                    // (Getting the value)
-                    self::$core::$path_args = $matches;
+        if ( $target === false )
+        {// Value not found
+            foreach ( $this->routes as $app_route => $v )
+            {// Processing each entry
+                foreach ( $v as $app_method => $app_target )
+                {// Processing each entry
+                    if ( $app_method !== $method ) continue;
+
+                    if ( $route[0] === '/' && $route[ strlen($route) - 1 ] === '/' )
+                    {// (Route is defined as regex)
+                        if ( preg_match( $app_route, $route, $matches ) === 1 )
+                        {// Match OK
+                            // (Getting the value)
+                            $args = $matches;
+
+                            // (Getting the value)
+                            $target = $app_target;
 
 
 
-                    // Returning the value
-                    return $routes[ $path ][ $request::$method ] ?? false;
+                            // Breaking the iteration
+                            break 2;
+                        }
+                    }
+                    else
+                    {// (Route is not defined as regex)
+                        // (Getting the values)
+                        $route_parts     = explode( '/', $route );
+                        $app_route_parts = explode( '/', $app_route );
+
+                        if ( count($route_parts) !== count($app_route_parts) ) continue;
+
+
+
+                        // (Getting the value)
+                        $diff = array_diff( $route_parts, $app_route_parts );
+
+                        if ( !$diff )
+                        {// (Parts are equals)
+                            // (Getting the value)
+                            $target = $app_target;
+
+
+
+                            // Breaking the iteration
+                            break 2;
+                        }
+
+
+
+                        foreach ( $route_parts as $k => $v )
+                        {// Processing each entry
+                            if ( $route_parts[$k] !== $app_route_parts[$k] )
+                            {// (Values are different)
+                                if ( preg_match( '/\[\s*([^\s]+)\s*\]/', $app_route_parts[$k], $matches ) === 1 )
+                                {// Match OK
+                                    // (Getting the value)
+                                    $args[ $matches[1] ] = $route_parts[$k];
+                                }
+                                else
+                                {// Match failed
+                                    // Breaking the iteration
+                                    break 2;
+                                }
+                            }
+                        }
+
+                        if ( $args )
+                        {// Value found
+                            // (Getting the value)
+                            $target = $app_target;
+
+
+
+                            // Breaking the iteration
+                            break 2;
+                        }
+                    }
                 }
             }
-            else
-            {// (Path is a normal string)
+        }
+
+        if ( $target === false )
+        {// Value not found
+            if ( $this->fallback_target )
+            {// Value found
                 // (Getting the value)
-                $path_args = self::fetch_path_args( $request::$path, $path );
-
-                if ( $path_args )
-                {// Value found
-                    // (Getting the value)
-                    self::$core::$path_args = $path_args;
-
-
-
-                    // Returning the value
-                    return $routes[ $path ][ $request::$method ] ?? false;
-                }
+                $target = $this->fallback_target;
             }
         }
 
 
 
-        // (Setting the value)
-        self::$core::$path_args = [];
-
-
-
-        // Returning the value
-        return $routes[ $request::$path ][ $request::$method ] ?? false;
-    }
-
-    # Returns [bool] | Throws [Exception]
-    public function resolve_destination ()
-    {
-        try
-        {
-            // (Creating an Analyzer)
-            $performance_analyzer = Analyzer::create();
-
-            // (Opening the analyzer)
-            $performance_analyzer->open();
-
-
-
-            // (Fetching the destination)
-            $destination = $this->fetch_destination();
-
-            if ( $destination === false )
-            {// (Destination not found)
-                // (Getting the value)
-                $destination = self::$core::$fallback_route;
-
-                // (Setting the http status code)
-                http_response_code( 404 );
-            }
-
-
-
+        if ( $target )
+        {// Value found
             // (Getting the value)
-            self::$core::$route_tags = $destination->tags;
-
-
-
-            // (Calling the user function by array)
-            $continue = call_user_func_array( [ new self::$core::$gate_ns( self::$core ) , 'run' ], [  ] ) !== false;
-
-            if ( $continue )
-            {// Value is true
-                // (Processing the middlewares)
-                $continue = $destination->process_middlewares() !== false;
-
-                if ( $continue )
-                {// Value is true
-                    switch ( $destination->get_type() )
-                    {
-                        case 'define':
-                            // (Calling the function)
-                            $response = ( $destination->function )( self::$core );
-                        break;
-
-                        case 'link':
-                            // (Getting the values)
-                            $controller = $destination->controller;
-                            $action     = $destination->action;
-
-                            $instance   = new $controller( self::$core );
-
-
-
-                            // (Calling the user function by array)
-                            $response = call_user_func_array( [ $instance , $action ], [  ] );
-                        break;
-                    }
-
-                    if ( $response !== null )
-                    {// (Controller method returns something)
-                        // (Setting the header)
-                        header('Content-Type: application/json');
-
-                        // Printing the value
-                        echo json_encode( $response );
-                    }
-                }
-            }
-
-
-
-            // (Closing the analyzer)
-            $performance_analyzer->close();
-
-
-
-            // (Pushing the message)
-            self::$core::$loggers['call']->push( self::$core::$request . ' -> ' . $performance_analyzer );
-        }
-        catch (\Exception $e)
-        {
-            // (Getting the value)
-            $message = (string) $e;
-
-            // (Pushing the message)
-            self::$core::$loggers['error']->push( self::$core::$request . ' -> ' . str_replace( "\n", " >> ", $message ) );
-
-            // Throwing an exception
-            throw $e;
-
-            // Returning the value
-            return false;
+            $target->args = &$args;
         }
 
 
 
         // Returning the value
-        return true;
+        return $target;
     }
 }
 

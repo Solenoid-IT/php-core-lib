@@ -6,28 +6,21 @@ namespace Solenoid\Core\MVC;
 
 
 
-use \Solenoid\Core\Core;
+use \Solenoid\Core\App\App;
 
 
 
 class Controller
 {
-    public static Core $core;
+    public static App $app;
 
 
 
     # Returns [self]
-    public function __construct (Core &$core)
+    public function __construct (App &$app)
     {
         // (Getting the value)
-        self::$core = $core;
-    }
-
-    # Returns [Controller]
-    public static function create (Core &$core)
-    {
-        // Returning the value
-        return new Controller( $core );
+        self::$app = &$app;
     }
 }
 
