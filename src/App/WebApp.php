@@ -9,6 +9,8 @@ namespace Solenoid\Core\App;
 use \Solenoid\Core\Routing\Router;
 use \Solenoid\HTTP\Request;
 
+use \Solenoid\Core\Service;
+
 
 
 class WebApp extends App
@@ -45,6 +47,31 @@ class WebApp extends App
 
         // (Getting the value)
         $this->request = Request::read();
+
+
+
+        // (Getting the value)
+        $envs = $config['envs'][ self::fetch_context() ];
+
+        if ( $envs )
+        {// Value found
+            foreach ( $envs as $env )
+            {// Processing each entry
+                if ( in_array( $this->request->host, $env->hosts ) )
+                {// Match OK
+                    // (Getting the value)
+                    parent::$env = $env;
+
+                    // Breaking the iteration
+                    break;
+                }
+            }
+        }
+
+
+
+        // (Getting the values)
+        Service::$app = &$this;
     }
 
 

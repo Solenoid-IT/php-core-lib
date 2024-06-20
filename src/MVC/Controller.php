@@ -12,7 +12,7 @@ use \Solenoid\Core\App\App;
 
 class Controller
 {
-    public static App $app;
+    public App $app;
 
 
 
@@ -20,7 +20,7 @@ class Controller
     public function __construct (App &$app)
     {
         // (Getting the value)
-        self::$app = &$app;
+        $this->app = &$app;
     }
 }
 

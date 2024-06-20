@@ -6,28 +6,21 @@ namespace Solenoid\Core\MVC;
 
 
 
-use \Solenoid\Core\Core;
+use \Solenoid\Core\App\App;
 
 
 
 class Model
 {
-    public static Core $core;
+    public App $app;
 
 
 
     # Returns [self]
-    public function __construct (Core &$core)
+    public function __construct (App &$app)
     {
         // (Getting the value)
-        self::$core = $core;
-    }
-
-    # Returns [Model]
-    public static function create (Core &$core)
-    {
-        // Returning the value
-        return new Model( $core );
+        $this->app = &$app;
     }
 }
 

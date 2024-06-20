@@ -7,6 +7,8 @@ namespace Solenoid\Core\App;
 
 
 use \Solenoid\Log\Logger;
+use \Solenoid\Core\Blade;
+use \Solenoid\Core\Env;
 
 
 
@@ -17,7 +19,7 @@ class App
     public string $id;
     public string $name;
 
-    public array  $history;
+    public string $history;
 
     public string $gate;
     public array  $middlewares;
@@ -28,7 +30,9 @@ class App
 
     public string $route_handler;
 
-    public string $fqdn;
+    public Blade  $blade;
+
+    public Env    $env;
 
 
 
@@ -72,8 +76,11 @@ class App
 
 
 
-        // (Getting the value)
-        $this->fqdn = $config['fqdn'];
+        if ( $config['blade'] )
+        {// Value found
+            // (Getting the value)
+            $this->blade = new Blade( $config['blade']['views'], $config['blade']['cache'], true );
+        }
     }
 
 

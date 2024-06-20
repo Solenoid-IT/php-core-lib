@@ -14,26 +14,21 @@ class Env
 
 
 
+    public string $id;
     public string $type;
-    public array $hosts;
+    public array  $hosts;
     public array  $data;
 
 
 
     # Returns [self]
-    public function __construct (string $type = self::TYPE_CUSTOM, array $hosts = [ 'localhost' ], array $data = [])
+    public function __construct (string $id, string $type = self::TYPE_CUSTOM, array $hosts = [ 'localhost' ], array $data = [])
     {
         // (Getting the values)
+        $this->id    = $id;
         $this->type  = $type;
         $this->hosts = $hosts;
         $this->data  = $data;
-    }
-
-    # Returns [Env]
-    public static function create (string $type = self::TYPE_CUSTOM, array $hosts = [ 'localhost' ], array $data = [])
-    {
-        // Returning the value
-        return new Env( $type, $hosts, $data );
     }
 }
 

@@ -2,28 +2,25 @@
 
 
 
-namespace Solenoid\Core;
+namespace Solenoid\Core\MVC;
+
+
+
+use \Solenoid\Core\App\App;
 
 
 
 class Middleware
 {
-    public static Core $core;
+    public App $app;
 
 
 
     # Returns [self]
-    public function __construct (Core &$core)
+    public function __construct (App &$app)
     {
         // (Getting the value)
-        self::$core = $core;
-    }
-
-    # Returns [Middleware]
-    public static function create (Core &$core)
-    {
-        // Returning the value
-        return new Middleware( $core );
+        $this->app = &$app;
     }
 }
 

@@ -6,25 +6,13 @@ namespace Solenoid\Core;
 
 
 
+use \Solenoid\Core\App\App;
+
+
+
 class Service
 {
-    public static Core $core;
-
-
-
-    # Returns [self]
-    public function __construct (Core &$core)
-    {
-        // (Getting the value)
-        self::$core = $core;
-    }
-
-    # Returns [Service]
-    public static function create (Core &$core)
-    {
-        // Returning the value
-        return new Service( $core );
-    }
+    public static App $app;
 }
 
 
