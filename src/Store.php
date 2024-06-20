@@ -14,7 +14,7 @@ class Store
 {
     private static $instance;
 
-    protected static $app;
+    protected static App $app;
 
 
 
