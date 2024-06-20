@@ -159,7 +159,7 @@ class Target
 
 
             // (Calling the user function by array)
-            $gate_lock = call_user_func_array( [ new ($app->gate)(), 'run' ], [ $app ] ) === false;
+            $gate_lock = call_user_func_array( [ $app->gate, 'run' ], [  ] ) === false;
 
             if ( !$gate_lock )
             {// (There is no a gate lock)
@@ -192,7 +192,7 @@ class Target
 
                     foreach ( $middlewares as $middleware )
                     {// Processing each entry
-                        if ( call_user_func_array( [ $middleware, 'run' ], [ $app ] ) === false )
+                        if ( call_user_func_array( [ $middleware, 'run' ], [  ] ) === false )
                         {// (There is a middleware lock)
                             // (Setting the value)
                             $middleware_lock = true;
@@ -216,7 +216,7 @@ class Target
                     if ( $this->class && $this->fn )
                     {// (Target has been linked)
                         // (Calling the user function by array)
-                        $response = call_user_func_array( [ ( new ($this->class)( $app ) ), $this->fn ], [ $app ] );
+                        $response = call_user_func_array( [ ( new ($this->class)($app) ), $this->fn ], [  ] );
                     }
 
 

@@ -10,6 +10,15 @@ use \Solenoid\Log\Logger;
 use \Solenoid\Core\Blade;
 use \Solenoid\Core\Env;
 
+use \Solenoid\Core\Gate;
+use \Solenoid\Core\Middleware;
+use \Solenoid\Core\Store;
+use \Solenoid\Core\Service;
+
+use \Solenoid\Core\MVC\Model;
+use \Solenoid\Core\MVC\View;
+use \Solenoid\Core\MVC\Controller;
+
 
 
 class App
@@ -33,6 +42,9 @@ class App
     public Blade  $blade;
 
     public Env    $env;
+
+    public string $credentials;
+    public string $storage;
 
 
 
@@ -81,6 +93,24 @@ class App
             // (Getting the value)
             $this->blade = new Blade( $config['blade']['views'], $config['blade']['cache'], true );
         }
+
+
+
+        // (Getting the values)
+        $this->credentials = $config['credentials'];
+        $this->storage     = $config['storage'];
+
+
+
+        // (Initializing the objects)
+        Gate::init($this);
+        Middleware::init($this);
+        Store::init($this);
+        Service::init($this);
+
+        Model::init($this);
+        View::init($this);
+        Controller::init($this);
     }
 
 
@@ -89,7 +119,25 @@ class App
     public function fetch_history ()
     {
         // (Getting the value)
-        $file_content = file_get_contents( $this->history['file_path'] );
+        $file_content = file_get_contents( $this->history );
+
+        if ( $file_content === false )
+        {// (Unable to read the file content)
+            // Returning the value
+            return false;
+        }
+
+
+
+        // Returning the value
+        return json_decode( $file_content, true );
+    }
+
+    # Returns [array<assoc>]
+    public function fetch_credentials ()
+    {
+        // (Getting the value)
+        $file_content = file_get_contents( $this->credentials );
 
         if ( $file_content === false )
         {// (Unable to read the file content)
