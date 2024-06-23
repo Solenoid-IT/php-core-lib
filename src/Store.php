@@ -14,7 +14,7 @@ class Store
 {
     private static $instance;
 
-    protected static App $app;
+    protected App $app;
 
 
 
@@ -22,7 +22,7 @@ class Store
     private function __construct (App &$app)
     {
         // (Getting the value)
-        self::$app = &$app;
+        $this->$app = &$app;
     }
 
 
