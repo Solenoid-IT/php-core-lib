@@ -14,6 +14,8 @@ use \Solenoid\Core\Env;
 
 class App
 {
+    public int    $ts;
+
     public string $basedir;
 
     public string $id;
@@ -42,6 +44,11 @@ class App
     # Returns [self] | Throws [Exception]
     public function __construct (array $config)
     {
+        // (Getting the value)
+        $this->ts = time();
+
+
+
         // (Getting the values)
         $this->basedir     = realpath( $config['basedir'] );
 

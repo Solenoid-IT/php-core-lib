@@ -120,6 +120,30 @@ class WebApp extends App
         // Returning the value
         return $this;
     }
+
+
+
+    # Returns [string]
+    public function asset (string $value)
+    {
+        switch ( $this->env->type )
+        {
+            case 'dev':
+                // (Getting the value)
+                $value = $value . '?ts=' . $this->ts;
+            break;
+
+            case 'prod':
+                // (Getting the value)
+                $value = $value . '?v=' . array_keys( $this->fetch_history() )[0];
+            break;
+        }
+
+
+
+        // Returning the value
+        return $value;
+    }
 }
 
 
