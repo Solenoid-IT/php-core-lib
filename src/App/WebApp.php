@@ -99,7 +99,7 @@ class WebApp extends App
     public function run ()
     {
         // (Resolving the route)
-        $target = $this->router->resolve( $_GET[ $this->route_handler ], $_SERVER['REQUEST_METHOD'] );
+        $target = $this->router->resolve( '/' . $_GET[ $this->route_handler ], $_SERVER['REQUEST_METHOD'] );
 
         if ( $target === false )
         {// (Target not found)
