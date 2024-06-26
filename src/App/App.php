@@ -101,27 +101,6 @@ class App
 
 
 
-    /*
-
-    # Returns [self]
-    public static function init (array $config)
-    {
-        if ( !isset( self::$instance ) )
-        {// Value not found
-            // (Getting the value)
-            self::$instance = new self($config);
-        }
-
-
-
-        // Returning the value
-        return self::$instance;
-    }
-
-    */
-
-
-
     # Returns [array<assoc>]
     public function fetch_history ()
     {
