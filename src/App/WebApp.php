@@ -13,7 +13,7 @@ use \Solenoid\HTTP\Request;
 
 class WebApp extends App
 {
-    private self $instance;
+    private static self $instance;
 
     public Router  $router;
     public Request $request;
@@ -60,7 +60,7 @@ class WebApp extends App
                 if ( in_array( $this->request->host, $env->hosts ) )
                 {// Match OK
                     // (Getting the value)
-                    parent::$env = $env;
+                    $this->env = $env;
 
                     // Breaking the iteration
                     break;
@@ -99,7 +99,7 @@ class WebApp extends App
     public function run ()
     {
         // (Resolving the route)
-        $target = $this->router->resolve( $_GET[ parent::$route_handler ], $_SERVER['REQUEST_METHOD'] );
+        $target = $this->router->resolve( $_GET[ $this->route_handler ], $_SERVER['REQUEST_METHOD'] );
 
         if ( $target === false )
         {// (Target not found)
