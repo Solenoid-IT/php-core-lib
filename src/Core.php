@@ -90,10 +90,10 @@ class Core
         self::$request     = $request ? $request : null;
         self::$context     = self::$request ? 'http' : 'cli';
         self::$basedir     = $config['basedir'];
-        self::$app_history = $config['app_history'];
-        self::$app_id      = $config['app_id'];
-        self::$app_name    = $config['app_name'];
-        self::$app_version = array_keys( self::fetch_app_history() )[0];
+        $app_history = $config['app_history'];
+        $app_id      = $config['app_id'];
+        $app_name    = $config['app_name'];
+        $app_version = array_keys( self::fetch_app_history() )[0];
         self::$credentials = $config['credentials'];
 
 
@@ -306,7 +306,7 @@ class Core
 
             case 'prod':
                 // (Getting the value)
-                $asset_path = $path . '?v=' . self::$app_version;
+                $asset_path = $path . '?v=' . $app_version;
             break;
         }
 
@@ -331,7 +331,7 @@ class Core
     public static function fetch_app_history ()
     {
         // Returning the value
-        return json_decode( file_get_contents( self::$app_history ), true );
+        return json_decode( file_get_contents( $app_history ), true );
     }
 
     # Returns [assoc]
