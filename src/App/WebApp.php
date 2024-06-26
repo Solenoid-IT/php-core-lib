@@ -9,19 +9,19 @@ namespace Solenoid\Core\App;
 use \Solenoid\Core\Routing\Router;
 use \Solenoid\HTTP\Request;
 
-use \Solenoid\Core\Service;
-
 
 
 class WebApp extends App
 {
+    private self $instance;
+
     public Router  $router;
     public Request $request;
 
 
 
     # Returns [self] | Throws [Exception]
-    public function __construct (array $config, Router &$router)
+    private function __construct (array $config, Router &$router)
     {
         if ( parent::fetch_context() !== 'http' )
         {// Match failed
@@ -67,11 +67,30 @@ class WebApp extends App
                 }
             }
         }
+    }
 
 
 
-        // (Getting the values)
-        Service::$app = &$this;
+    # Returns [self] | Throws [Exception]
+    public static function init (array $config, Router &$router)
+    {
+        if ( !isset( self::$instance ) )
+        {// Value not found
+            // (Getting the value)
+            self::$instance = new self( $config, $router );
+        }
+
+
+
+        // Returning the value
+        return self::$instance;
+    }
+
+    # Returns [self]
+    public static function fetch ()
+    {
+        // Returning the value
+        return self::$instance;
     }
 
 

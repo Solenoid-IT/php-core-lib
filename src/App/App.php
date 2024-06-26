@@ -10,15 +10,6 @@ use \Solenoid\Log\Logger;
 use \Solenoid\Core\Blade;
 use \Solenoid\Core\Env;
 
-use \Solenoid\Core\Gate;
-use \Solenoid\Core\Middleware;
-use \Solenoid\Core\Store;
-use \Solenoid\Core\Service;
-
-use \Solenoid\Core\MVC\Model;
-use \Solenoid\Core\MVC\View;
-use \Solenoid\Core\MVC\Controller;
-
 
 
 class App
@@ -99,19 +90,28 @@ class App
         // (Getting the values)
         $this->credentials = $config['credentials'];
         $this->storage     = $config['storage'];
-
-
-
-        // (Initializing the objects)
-        Gate::init($this);
-        Middleware::init($this);
-        Store::init($this);
-        Service::init($this);
-
-        Model::init($this);
-        View::init($this);
-        Controller::init($this);
     }
+
+
+
+    /*
+
+    # Returns [self]
+    public static function init (array $config)
+    {
+        if ( !isset( self::$instance ) )
+        {// Value not found
+            // (Getting the value)
+            self::$instance = new self($config);
+        }
+
+
+
+        // Returning the value
+        return self::$instance;
+    }
+
+    */
 
 
 
