@@ -46,7 +46,7 @@ class WebApp extends App
 
 
         // (Getting the value)
-        $this->request = Request::read();
+        $this->request = Request::fetch();
 
 
 
@@ -57,7 +57,7 @@ class WebApp extends App
         {// Value found
             foreach ( $envs as $env )
             {// Processing each entry
-                if ( in_array( $this->request->host, $env->hosts ) )
+                if ( in_array( $this->request->server_name, $env->hosts ) )
                 {// Match OK
                     // (Getting the value)
                     $this->env = $env;
