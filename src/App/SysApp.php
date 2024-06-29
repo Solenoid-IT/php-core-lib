@@ -121,7 +121,8 @@ class SysApp extends App
         // (Getting the value)
         $this->args = &$args;
 
-
+        echo 'alced';
+print_r($this->args);
 
         // (Getting the value)
         $target = Target::link( 'App\\Task\\' . str_replace( '/', '\\', $args[0] ), $args[1] );
