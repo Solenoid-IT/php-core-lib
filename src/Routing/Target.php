@@ -134,6 +134,18 @@ class Target
     // Returns [self|false] | Throws [Exception]
     public function run_app (App &$app)
     {
+        if ( $app->env->type === 'dev' )
+        {// (App environment is 'dev')
+            // (Setting the ini)
+            ini_set('display_errors', '1');
+            ini_set('display_startup_errors', '1');
+
+            // (Setting the value)
+            error_reporting(E_ALL);
+        }
+
+
+
         // (Getting the values)
         $app_context   = App::fetch_context();
         $app_initiator = App::fetch_initiator();
