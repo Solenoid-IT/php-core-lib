@@ -141,7 +141,7 @@ class Target
             ini_set('display_startup_errors', '1');
 
             // (Setting the value)
-            error_reporting(E_ALL);
+            error_reporting(E_ERROR);
         }
 
 
