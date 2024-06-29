@@ -103,18 +103,24 @@ class SysApp extends App
         global $argv;
 
 
-die(print_r($argv));
-        /*// (Getting the value)
-        $args = array_splice( $argv, 2 );
+
+        // (Getting the value)
+        $args = $argv;
+
+        // (Popping the array)
+        array_pop($args);
+        array_pop($args);
+
+
 
         if ( count($args) < 2 )
         {// (There are no args)
             // Printing the value
             echo 'php bootstrap.php <task> <method> ...<args> ';
         }
+die(print_r($args));
 
-
-
+/*
         // (Resolving the route)
         $target = Target::link();
 
