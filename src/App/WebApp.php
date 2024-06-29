@@ -132,7 +132,7 @@ class WebApp extends App
         catch (\Exception $e)
         {
             // (Setting the response-code)
-            http_response_code(500);die("err -> $e");
+            http_response_code(500);die("err out -> $e");
 
             // Throwing an exception
             throw $e;
