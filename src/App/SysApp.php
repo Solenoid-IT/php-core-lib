@@ -119,13 +119,10 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $this->args = array_slice( $args, 2 );
-
-        echo 'alced';
-print_r($this->args);
+        $target = Target::link( 'App\\Task\\' . str_replace( '/', '\\', $args[0] ), $args[1] );
 
         // (Getting the value)
-        $target = Target::link( 'App\\Task\\' . str_replace( '/', '\\', $args[0] ), $args[1] );
+        $target->args = array_slice( $args, 2 );
 
 
 
