@@ -15,6 +15,7 @@ class SysApp extends App
     private static self $instance;
 
     public string  $host;
+    public string  $task;
 
 
 
@@ -118,8 +119,19 @@ class SysApp extends App
 
 
 
+        // (Getting the values)
+        $class  = 'App\\Task\\' . str_replace( '/', '\\', $args[0] );
+        $method = $args[1];
+
+
+
         // (Getting the value)
-        $target = Target::link( 'App\\Task\\' . str_replace( '/', '\\', $args[0] ), $args[1] );
+        $this->task = "$class -> $method";
+
+
+
+        // (Getting the value)
+        $target = Target::link( $class, $method );
 
         // (Getting the value)
         $target->args = array_slice( $args, 2 );
