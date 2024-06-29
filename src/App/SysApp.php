@@ -110,7 +110,7 @@ class SysApp extends App
         if ( count($args) < 2 )
         {// (There are no args)
             // Printing the value
-            echo '<task> <method> ...<args> ';
+            echo "\n\nphp $argv[0] <task> <method> ...<args>\n\n";
         }
 die(print_r($args));
 
