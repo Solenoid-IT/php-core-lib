@@ -119,7 +119,12 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $target = Target::link( $args[1], $args[2], array_slice( $args, 2 ) );
+        $this->args = &$args;
+
+
+
+        // (Getting the value)
+        $target = Target::link( $args[1], $args[2] );
 
 
 
