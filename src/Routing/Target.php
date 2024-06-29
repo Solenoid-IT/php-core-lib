@@ -20,6 +20,7 @@ class Target
 
     public string $class;
     public string $fn;
+    public array  $fa;
 
     public array  $args;
 
@@ -53,14 +54,17 @@ class Target
     }
 
     # Returns [Target]
-    public static function link (string $class, string $fn)
+    public static function link (string $class, string $fn, array $args = [])
     {
         // (Creating a Target)
         $target = new Target();
 
-        // (Getting the value)
-        $target->class = $class;
-        $target->fn    = $fn;
+
+
+        // (Getting the values)
+        $target->class  = $class;
+        $target->fn     = $fn;
+        $target->fa     = $args;
 
 
 
@@ -216,7 +220,7 @@ class Target
                     if ( $this->class && $this->fn )
                     {// (Target has been linked)
                         // (Calling the user function by array)
-                        $response = call_user_func_array( [ ( new ($this->class)($app) ), $this->fn ], [  ] );
+                        $response = call_user_func_array( [ ( new ($this->class)($app) ), $this->fn ], $this->fa );
                     }
 
 

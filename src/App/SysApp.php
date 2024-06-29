@@ -105,32 +105,26 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $args = array_slice( $argv, 2 );
+        $args = array_slice( $argv, 1 );
 
         if ( count($args) < 2 )
         {// (There are no args)
             // Printing the value
             echo "\n\nphp $argv[0] <task> <method> ...<args>\n\n";
+
+            // Returning the value
+            return $this;
         }
-die(print_r($args));
 
-/*
-        // (Resolving the route)
-        $target = Target::link();
 
-        if ( $target === false )
-        {// (Target not found)
-            // (Setting the header)
-            http_response_code(404);
 
-            // (Printing the value)
-            echo 'ROUTE NOT FOUND';
-        }
+        // (Getting the value)
+        $target = Target::link( $args[1], $args[2], array_slice( $args, 2 ) );
 
 
 
         // (Running the target)
-        $target->run_app($this);*/
+        $target->run_app($this);
 
 
 
