@@ -70,7 +70,7 @@ class App
             foreach ( $v as $type => $file_path )
             {// Processing each entry
                 // (Getting the value)
-                $this->loggers[$context][$type] = Logger::create($file_path);
+                $this->loggers[$context][$type] = new Logger($file_path);
             }
         }
 
