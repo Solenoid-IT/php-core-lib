@@ -252,6 +252,14 @@ class Target
 
 
 
+            if ( $app_context === 'http' )
+            {// Match OK
+                // (Setting the response-code)
+                http_response_code(500);
+            }
+
+
+
             if ( $app->loggers[$app_context]['error'] )
             {// Value found
                 // (Pushing the message)

@@ -118,26 +118,8 @@ class WebApp extends App
 
 
 
-        try
-        {
-            // (Running the target)
-            $target->run_app($this);
-        }
-        catch (\Exception $e)
-        {
-            // (Setting the response-code)
-            http_response_code(500);
-
-
-
-            // Throwing an exception
-            throw $e;
-
-
-
-            // Returning the value
-            return false;
-        }
+        // (Running the target)
+        $target->run_app($this);
 
 
 
