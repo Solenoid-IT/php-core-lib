@@ -105,18 +105,12 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $args = $argv;
-
-        // (Popping the array)
-        array_shift($args);
-        array_shift($args);
-
-
+        $args = array_slice( $argv, 2 );
 
         if ( count($args) < 2 )
         {// (There are no args)
             // Printing the value
-            echo 'php bootstrap.php <task> <method> ...<args> ';
+            echo '<task> <method> ...<args> ';
         }
 die(print_r($args));
 
