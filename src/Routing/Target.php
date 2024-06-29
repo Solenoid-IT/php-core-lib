@@ -265,6 +265,14 @@ class Target
 
 
 
+            if ( $app_context === 'http' )
+            {// Match OK
+                // (Setting the response-code)
+                http_response_code(500);
+            }
+
+
+
             // Returning the value
             return false;
         }
