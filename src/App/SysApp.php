@@ -106,7 +106,7 @@ class SysApp extends App
 
         // (Getting the value)
         $args = array_slice( $argv, 1 );
-die(print_r($args));
+
         if ( count($args) < 2 )
         {// (There are no args)
             // Printing the value
