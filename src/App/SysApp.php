@@ -108,8 +108,8 @@ class SysApp extends App
         $args = $argv;
 
         // (Popping the array)
-        array_pop($args);
-        array_pop($args);
+        array_shift($args);
+        array_shift($args);
 
 
 
