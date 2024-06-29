@@ -95,7 +95,7 @@ class WebApp extends App
 
 
 
-    # Returns [self]
+    # Returns [self|false] | Throws [Exception]
     public function run ()
     {
         // (Resolving the route)
@@ -112,8 +112,22 @@ class WebApp extends App
 
 
 
-        // (Running the target)
-        $target->run_app($this);
+        try
+        {
+            // (Running the target)
+            $target->run_app($this);
+        }
+        catch (\Exception $e)
+        {
+            // (Setting the response-code)
+            http_response_code(500);
+
+            // Throwing an exception
+            throw $e;
+
+            // Returning the value
+            return false;
+        }
 
 
 
