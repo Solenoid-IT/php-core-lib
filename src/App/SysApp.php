@@ -99,16 +99,21 @@ class SysApp extends App
     # Returns [self|false] | Throws [Exception]
     public function run ()
     {
-        // (Getting the value)
+        // (Accessing the value)
+        global $argv;
+
+
+die(print_r($argv));
+        /*// (Getting the value)
         $args = array_splice( $argv, 2 );
-die(print_r($args));
+
         if ( count($args) < 2 )
         {// (There are no args)
             // Printing the value
             echo 'php bootstrap.php <task> <method> ...<args> ';
         }
 
-/*
+
 
         // (Resolving the route)
         $target = Target::link();
