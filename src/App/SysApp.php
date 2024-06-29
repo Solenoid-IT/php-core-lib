@@ -122,9 +122,9 @@ class SysApp extends App
         $this->args = &$args;
 
 
-die(str_replace( '/', '\\', $args[1] ));
+
         // (Getting the value)
-        $target = Target::link( str_replace( '/', '\\', $args[1] ), $args[2] );
+        $target = Target::link( 'App\\Task\\' . str_replace( '/', '\\', $args[0] ), $args[1] );
 
 
 
