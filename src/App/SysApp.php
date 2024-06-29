@@ -119,7 +119,7 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $this->args = &$args;
+        $this->args = array_slice( $args, 2 );
 
         echo 'alced';
 print_r($this->args);
