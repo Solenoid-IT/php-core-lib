@@ -153,7 +153,7 @@ class App
     public static function fetch_context ()
     {
         // Returning the value
-        return isset($_SERVER) ? 'http' : 'cli';
+        return isset( $_SERVER['REQUEST_METHOD'] ) ? 'http' : 'cli';
     }
 
     # Returns [string]
