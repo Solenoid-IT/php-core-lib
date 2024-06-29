@@ -179,7 +179,7 @@ class Target
                             $message = "Middleware group '$group' not found";
 
                             // (Pushing the message)
-                            $app->loggers[$app_context]['error']->push( $app->{ $app_initiator } . ' -> ' . str_replace( "\n", " >> ", $message ) );
+                            $app->loggers[$app_context]['error']->push( $app->{ $app_initiator } . ' -> ' . $message );
                         }
 
 
@@ -255,7 +255,7 @@ class Target
             if ( $app->loggers[$app_context]['error'] )
             {// Value found
                 // (Pushing the message)
-                $app->loggers[$app_context]['error']->push( $app->{ $app_initiator } . ' -> ' . str_replace( "\n", " >> ", $message ) );
+                $app->loggers[$app_context]['error']->push( $app->{ $app_initiator } . ' -> ' . $message );
             }
 
 
