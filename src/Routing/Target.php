@@ -258,7 +258,7 @@ class Target
                 $app->loggers[$app_context]['error']->push( $app->{ $app_initiator } . ' -> ' . str_replace( "\n", " >> ", $message ) );
             }
 
-die("debug err -> $e");
+
 
             // Throwing an exception
             throw $e;
