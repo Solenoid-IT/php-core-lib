@@ -97,6 +97,16 @@ class App
         // (Getting the values)
         $this->credentials = $config['credentials'];
         $this->storage     = $config['storage'];
+
+
+
+        // (Setting the ini)
+        ini_set( 'log_errors_max_len', '0' );
+
+
+
+        // (Setting the value)
+        error_reporting(E_ERROR);
     }
 
 
