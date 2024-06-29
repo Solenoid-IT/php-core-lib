@@ -126,7 +126,7 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $this->task = "$class -> $method";
+        $this->task = "$class::$method()";
 
 
 
