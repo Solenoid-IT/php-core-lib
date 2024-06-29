@@ -262,7 +262,6 @@ class Target
 
             // Throwing an exception
             throw $e;
-            http_response_code(500);
 
 
 
