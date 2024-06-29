@@ -124,7 +124,7 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $target = Target::link( $args[1], $args[2] );
+        $target = Target::link( str_replace( '/', '\\', $args[1] ), $args[2] );
 
 
 
