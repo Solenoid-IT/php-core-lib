@@ -72,7 +72,7 @@ class WebApp extends App
             if ( $this->env->type === 'dev' )
             {// (App environment is 'dev')
                 // (Setting the ini)
-                ini_set( 'display_errors', '1' );
+                ini_set( 'display_errors', 'off' );
                 #ini_set( 'display_startup_errors', '1' );
 
                 // (Setting the value)
