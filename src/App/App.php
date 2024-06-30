@@ -107,6 +107,11 @@ class App
 
         // (Setting the value)
         error_reporting(E_ERROR);
+
+
+
+        // (Setting the directory)
+        chdir( $this->basedir );
     }
 
 
