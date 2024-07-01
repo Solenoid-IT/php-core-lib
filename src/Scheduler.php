@@ -2,7 +2,7 @@
 
 
 
-namespace Solenoid\Core\Scheduler;
+namespace Solenoid\Core;
 
 
 
