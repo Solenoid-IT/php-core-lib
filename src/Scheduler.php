@@ -73,10 +73,10 @@ class Scheduler
         (
             function ()
             {
-                if ( $this->db['start'] )
+                if ( $this->db->data['start'] )
                 {// (Scheduler has been already started)
                     // Printing the value
-                    echo "\n\nScheduler -> " . $this->db['pid'] ." (already running) \n\n\n";
+                    echo "\n\nScheduler -> " . $this->db->data['pid'] ." (already running) \n\n\n";
 
                     // Closing the process
                     exit;
@@ -103,11 +103,11 @@ class Scheduler
 
 
 
-                if ( !$this->db['start'] )
+                if ( !$this->db->data['start'] )
                 {// (Scheduler has not been started yet)
                     // (Getting the values)
-                    $this->db['start'] = date( 'c', $current_ts );
-                    $this->db['pid']   = getmypid();
+                    $this->db->data['start'] = date( 'c', $current_ts );
+                    $this->db->data['pid']   = getmypid();
 
 
 
@@ -137,7 +137,7 @@ class Scheduler
                     if ( !file_exists( "$this->tasks_folder_path/$task_id.php" ) )
                     {// (Task does not exist)
                         // (Removing the element)
-                        unset( $this->db['tasks'][$task_id] );
+                        unset( $this->db->data['tasks'][$task_id] );
 
                         // (Saving the JDB)
                         $this->db->save();
@@ -167,13 +167,13 @@ class Scheduler
                         // (Getting the value)
                         $task_class = $this->task_ns_prefix . str_replace( '/', '\\', $task_id );
 
-                        if ( $this->db['tasks'][$task_id]['pid'] )
+                        if ( $this->db->data['tasks'][$task_id]['pid'] )
                         {// (Task has been already started)
-                            if ( Process::fetch_pid_info( $this->db['tasks'][$task_id]['pid'] ) === false )
+                            if ( Process::fetch_pid_info( $this->db->data['tasks'][$task_id]['pid'] ) === false )
                             {// (Task is not running)
                                 // (Setting the values)
-                                $this->db['tasks'][$task_id]['end'] = date('c');
-                                $this->db['tasks'][$task_id]['pid'] = null;
+                                $this->db->data['tasks'][$task_id]['end'] = date('c');
+                                $this->db->data['tasks'][$task_id]['pid'] = null;
 
 
 
@@ -204,10 +204,10 @@ class Scheduler
 
 
                         // (Getting the values)
-                        $this->db['tasks'][$task_id]['start'] = date('c');
-                        $this->db['tasks'][$task_id]['end']   = null;
+                        $this->db->data['tasks'][$task_id]['start'] = date('c');
+                        $this->db->data['tasks'][$task_id]['end']   = null;
 
-                        $this->db['tasks'][$task_id]['pid']   = $process->pid;
+                        $this->db->data['tasks'][$task_id]['pid']   = $process->pid;
 
 
 
