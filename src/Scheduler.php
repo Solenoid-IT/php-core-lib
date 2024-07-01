@@ -224,6 +224,24 @@ class Scheduler
         // Returning the value
         return $this;
     }
+
+    # Returns [self]
+    public function kill ()
+    {
+        // (Getting the value)
+        $pid = $this->db->read()['pid'];
+
+        if ( $pid )
+        {// Value found
+            // (Executing the command)
+            system("kill $pid");
+        }
+
+
+
+        // Returning the value
+        return $this;
+    }
 }
 
 
