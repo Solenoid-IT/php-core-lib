@@ -71,8 +71,11 @@ class Scheduler
         // (Running the daemon)
         $daemon->run
         (
-            function ()
-            {
+            function () use ($daemon)
+            {// (StartUp-Event)
+                // (Loading the JDB)
+                $this->db = JDB::load( $this->db->file_path );
+
                 if ( $this->db->data['start'] )
                 {// (Scheduler has been already started)
                     // Printing the value
@@ -84,12 +87,23 @@ class Scheduler
 
 
 
+                // (Getting the values)
+                $this->db->data['start'] = date( 'c', $daemon->startup_ts );
+                $this->db->data['pid']   = getmypid();
+
+
+
+                // (Saving the JDB)
+                $this->db->save();
+
+
+
                 // Printing the value
                 echo "\n\nScheduler -> " . getmypid() . "\n\n\n";
             },
 
             function ()
-            {
+            {// (Tick-Event)
                 // (Getting the value)
                 $day_ts = strtotime( date('Y-m-d') . ' 00:00:00' );
 
@@ -103,17 +117,8 @@ class Scheduler
 
 
 
-                if ( !$this->db->data['start'] )
-                {// (Scheduler has not been started yet)
-                    // (Getting the values)
-                    $this->db->data['start'] = date( 'c', $current_ts );
-                    $this->db->data['pid']   = getmypid();
-
-
-
-                    // (Saving the JDB)
-                    $this->db->save();
-                }
+                // (Loading the JDB)
+                $this->db = JDB::load( $this->db->file_path );
 
 
 
@@ -123,13 +128,15 @@ class Scheduler
 
 
                 // (Getting the value)
-                $config = $this->config->read();
-
-                if ( !$config['enabled'] ) return false;
+                $this->config = JDB::load( $this->config->file_path );
 
 
 
-                foreach ( $config['tasks'] as $task )
+                if ( !$this->config['enabled'] ) return false;
+
+
+
+                foreach ( $this->config['tasks'] as $task )
                 {// Processing each entry
                     // (Getting the value)
                     $task_id = $task['id'];
