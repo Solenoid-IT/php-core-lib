@@ -132,11 +132,11 @@ class Scheduler
 
 
 
-                if ( !$this->config['enabled'] ) return false;
+                if ( !$this->config->data['enabled'] ) return false;
 
 
 
-                foreach ( $this->config['tasks'] as $task )
+                foreach ( $this->config->data['tasks'] as $task )
                 {// Processing each entry
                     // (Getting the value)
                     $task_id = $task['id'];
