@@ -36,14 +36,14 @@ class Scheduler
 
 
     # Returns [self]
-    public function __construct (string $basedir = __DIR__, string $tasks_folder_path = __DIR__ . '/tasks/src', string $task_ns_prefix = 'App\\Task\\', ?JDB $db = null, ?JDB $config = null, string $executor = 'php bootstrap.php')
+    public function __construct (string $basedir, ?string $tasks_folder_path = null, string $task_ns_prefix = 'App\\Task\\', ?JDB $db = null, ?JDB $config = null, string $executor = 'php bootstrap.php')
     {
         // (Getting the values)
         $this->basedir           = $basedir;
-        $this->tasks_folder_path = $tasks_folder_path;
+        $this->tasks_folder_path = $tasks_folder_path ?? $this->basedir . '/tasks/src';
         $this->task_ns_prefix    = $task_ns_prefix;
-        $this->db                = $db ?? new JDB( __DIR__ . '/scheduler.json' );
-        $this->config            = $config ?? new JDB( __DIR__ . '/tasks/scheduler.json' );
+        $this->db                = $db ?? new JDB( $this->basedir . '/scheduler.json' );
+        $this->config            = $config ?? new JDB( $this->basedir . '/tasks/scheduler.json' );
         $this->executor          = $executor;
     }
 
