@@ -6,6 +6,8 @@ namespace Solenoid\Core;
 
 
 
+use \Solenoid\Core\Task;
+
 use \Solenoid\System\JDB;
 use \Solenoid\System\Daemon;
 use \Solenoid\System\Process;
@@ -19,7 +21,6 @@ class Scheduler
         'SECOND' => 1,
         'MINUTE' => 60,
         'HOUR'   => 3600,
-        #'WEEK'   => 3600 * 7,
         'DAY'    => 86400
     ]
     ;
@@ -45,6 +46,164 @@ class Scheduler
         $this->db                = $db ?? new JDB( $this->basedir . '/scheduler.json' );
         $this->config            = $config ?? new JDB( $this->basedir . '/tasks/scheduler.json' );
         $this->executor          = $executor;
+    }
+
+
+
+    # Returns [assoc]
+    public static function fetch_rules (array $rules)
+    {
+        // (Setting the value)
+        $rr = [];
+
+        foreach ( $rules as $rule )
+        {// Processing each entry
+            // (Getting the value)
+            $parts = explode( ' ', $rule, 1 );
+
+            if ( in_array( $parts[0], [ 'EVERY', 'AT' ] ) )
+            {// (Rule is time-based)
+                // (Appending the value)
+                $rr['time'][] = $rule;
+            }
+            else
+            if ( in_array( $parts[0], [ 'ON' ] ) )
+            {// (Rule is event-based)
+                // (Appending the value)
+                $rr['event'][] = $rule;
+            }
+        }
+
+
+
+        // Returning the value
+        return $rr;
+    }
+
+    # Returns [string|false|null]
+    public static function verify_time_rules (array $rules, int $current_ts)
+    {
+        // (Getting the value)
+        $day_ts = strtotime( date('Y-m-d') . ' 00:00:00' );
+
+        foreach ( $rules as $rule )
+        {// Processing each entry
+            // (Getting the values)
+            $parts = explode( ' ', $rule );
+
+            switch ( $parts[0] )
+            {
+                case 'EVERY':
+                    // (Getting the values)
+                    $factor = (int) $parts[1];
+                    $unit   = $parts[2];
+
+
+
+                    // (Getting the value)
+                    $start_ts   = $parts[4] ? strtotime( $parts[4] ) : $day_ts;
+
+
+
+                    switch ( $unit )
+                    {
+                        case 'SECOND':
+                        case 'MINUTE':
+                        case 'HOUR':
+                        case 'DAY':
+                            // (Getting the value)
+                            $duration = $factor * self::TIME_UNITS[$unit];
+                        break;
+
+                        case 'WEEK':
+                            // (Getting the value)
+                            $duration = strtotime( "+$factor week", $start_ts ) - $start_ts;
+                        break;
+
+                        case 'MONTH':
+                            // (Getting the value)
+                            $duration = strtotime( "+$factor month", $start_ts ) - $start_ts;
+                        break;
+
+                        case 'YEAR':
+                            // (Getting the value)
+                            $duration = strtotime( "+$factor year", $start_ts ) - $start_ts;
+                        break;
+
+                        default:
+                            // Returning the value
+                            return null;
+                    }
+
+
+
+                    if ( ( $current_ts - $start_ts ) % $duration === 0 )
+                    {// (Delta-Timestamp is a multiple of duration)
+                        // Returning the value
+                        return $rule;
+                    }
+                break;
+
+                case 'AT':
+                    if ( date( 'H:i:s', $current_ts ) === $parts[1] ) return $rule;
+                break;
+
+                default:
+                    // Returning the value
+                    return null;
+            }
+        }
+
+
+
+        // Returning the value
+        return false;
+    }
+
+    # Returns [string|false|null]
+    public function verify_event_rules (array $rules)
+    {return false;
+        foreach ( $rules as $rule )
+        {// Processing each entry
+            // (Getting the value)
+            $parts = explode( ' ', $rule );
+
+            if ( $parts[0] !== 'ON' ) return null;
+
+
+
+            // (Getting the values)
+            $fi     = $parts[1];
+            $op     = $parts[2];
+            $value  = $parts[3];
+
+            $factor = $parts[5] ?? 1;
+            $unit   = $parts[6] ?? 'SECOND';
+
+
+
+            // (Getting the values)
+            $fi_parts    = explode( '::', $fi );
+
+            $task_id     = $fi_parts[0];
+            $task_method = $fi_parts[1];
+            $task_args   = array_map( function ($arg) { return trim( $arg, " \n\r\t\v\0\"'" ); }, explode( ',', trim( $fi_parts[2], "()" ) ) );
+
+
+
+            // (Executing the process)
+            Process::execute
+            (
+                function () use ($task_id, $task_method, $task_args)
+                {
+                    // (Starting the task)
+                    Task::start( $task_id, $task_method, $task_args , $this->executor );
+                },
+
+                true
+            )
+            ;
+        }
     }
 
 
@@ -104,11 +263,15 @@ class Scheduler
 
             function ()
             {// (Tick-Event)
+                /*
+                
                 // (Getting the value)
                 $day_ts = strtotime( date('Y-m-d') . ' 00:00:00' );
 
                 // Printing the value
                 #echo "\n\nDay TS -> $day_ts ( " . date( 'Y-m-d H:i:s', $day_ts ) . " )\n\n\n";
+
+                */
 
 
 
@@ -157,20 +320,11 @@ class Scheduler
 
 
 
-                    // (Getting the values)
-                    $parts      = explode( ' ', $task['rule'] );
+                    // (Getting the value)
+                    $rules = self::fetch_rules( $task['rules'] );
 
-                    $num        = (int) $parts[1];
-                    $unit       = $parts[2];
-
-                    $start_ts   = $parts[4] ? strtotime( $parts[4] ) : $day_ts;
-
-                    $period     = $num * self::TIME_UNITS[$unit];
-
-
-
-                    if ( ( $current_ts - $start_ts ) % $period === 0 )
-                    {// (Delta-Timestamp is a multiple of period)
+                    if ( $rule = self::verify_time_rules( $rules['time'], $current_ts ) )
+                    {// (At least one of the time-rules has been matched)
                         // (Getting the value)
                         $task_class = $this->task_ns_prefix . str_replace( '/', '\\', $task_id );
 
@@ -206,7 +360,7 @@ class Scheduler
 
 
                         // Printing the value
-                        echo "\n\n" . date( 'c', $current_ts ) . " -> $task_class -> " . $task['rule'] . " -> $period s" . ( $process ? ' -> ' . $process->pid : '' ) . "\n\n";
+                        echo "\n\n" . date( 'c', $current_ts ) . " -> $task_class -> " . $rule . ( $process ? ' -> ' . $process->pid : '' ) . "\n\n";
 
 
 
@@ -220,6 +374,13 @@ class Scheduler
 
                         // (Saving the JDB)
                         $this->db->save();
+                    }
+                    else
+                    {// (There are no time-rules matched)
+                        if ( $rule = self::verify_event_rules( $rules['event'] ) )
+                        {// (At least one of the event-rules has been matched)
+                            // ahcid
+                        }
                     }
                 }
             }

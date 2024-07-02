@@ -28,7 +28,7 @@ class Task
 
 
     # Returns [int|false]
-    public static function start (string $id, string $fn = 'run', array $args = [], string $file_path = 'bootstrap.php')
+    public static function start (string $id, string $fn = 'run', array $args = [], string $executor = 'php bootstrap.php')
     {
         // (Getting the value)
         $args = implode( ' ', $args );
@@ -36,7 +36,7 @@ class Task
 
 
         // Returning the value
-        return Process::start("php $file_path $id $fn $args");
+        return Process::start("$executor $id $fn $args");
     }
 }
 
