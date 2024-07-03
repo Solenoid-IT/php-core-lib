@@ -43,7 +43,7 @@ class Scheduler
         $this->basedir           = $basedir;
         $this->tasks_folder_path = $tasks_folder_path ?? $this->basedir . '/tasks/src';
         $this->task_ns_prefix    = $task_ns_prefix;
-        $this->db                = $db ?? new JDB( $this->basedir . '/scheduler.json' );
+        $this->db                = $db ?? new JDB( $this->basedir . '/scheduler-db.json' );
         $this->config            = $config ?? new JDB( $this->basedir . '/tasks/scheduler.json' );
         $this->executor          = $executor;
     }
