@@ -232,6 +232,14 @@ class Scheduler
         (
             function () use ($daemon)
             {// (StartUp-Event)
+                if ( !$this->db->exists() )
+                {// (JDB not found)
+                    // (Initializing the JDB)
+                    $this->db->init();
+                }
+
+
+
                 // (Loading the JDB)
                 $this->db = JDB::load( $this->db->file_path );
 
@@ -263,18 +271,6 @@ class Scheduler
 
             function ()
             {// (Tick-Event)
-                /*
-                
-                // (Getting the value)
-                $day_ts = strtotime( date('Y-m-d') . ' 00:00:00' );
-
-                // Printing the value
-                #echo "\n\nDay TS -> $day_ts ( " . date( 'Y-m-d H:i:s', $day_ts ) . " )\n\n\n";
-
-                */
-
-
-
                 // (Getting the value)
                 $current_ts = time();
 
