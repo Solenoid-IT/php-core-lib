@@ -171,7 +171,7 @@ class Scheduler
 
     # Returns [string|false|null]
     public function verify_event_rules (array $rules)
-    {return false;
+    {
         foreach ( $rules as $rule )
         {// Processing each entry
             // (Getting the value)
@@ -200,18 +200,8 @@ class Scheduler
 
 
 
-            // (Executing the process)
-            Process::execute
-            (
-                function () use ($task_id, $task_method, $task_args)
-                {
-                    // (Starting the task)
-                    Task::start( $task_id, $task_method, $task_args , $this->executor );
-                },
-
-                true
-            )
-            ;
+            // (Starting the task)
+            Task::start( $task_id, $task_method, $task_args , $this->executor );
         }
     }
 
@@ -329,7 +319,7 @@ class Scheduler
                     $rules = self::fetch_rules( $task['rules'] );
 
                     if ( $matched_rules = self::verify_time_rules( $rules['time'], $current_ts ) )
-                    {// (There is at least one of the rules matched)
+                    {// (There is at least one of the time-rules matched)
                         // (Getting the value)
                         $task_class = $this->task_ns_prefix . str_replace( '/', '\\', $task_id );
 
@@ -381,11 +371,9 @@ class Scheduler
                         $this->db->save();
                     }
                     else
-                    {// (There are no time-rules matched)
-                        if ( $rule = self::verify_event_rules( $rules['event'] ) )
-                        {// (At least one of the event-rules has been matched)
-                            // ahcid
-                        }
+                    if ( self::verify_event_rules( $rules['event'] ) )
+                    {// (At least one of the event-rules has been matched)
+                        // ahcid
                     }
                 }
             }

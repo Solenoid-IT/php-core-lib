@@ -12,6 +12,8 @@ use \Solenoid\Core\App\App;
 
 class Controller
 {
+    /*
+    
     public App $app;
 
 
@@ -22,6 +24,8 @@ class Controller
         // (Getting the value)
         $this->app = &$app;
     }
+
+    */
 }
 
 
