@@ -59,7 +59,7 @@ class Scheduler
         foreach ( $rules as $rule )
         {// Processing each entry
             // (Getting the value)
-            $parts = explode( ' ', $rule, 1 );
+            $parts = explode( ' ', $rule, 2 );
 
             if ( in_array( $parts[0], [ 'EVERY', 'AT' ] ) )
             {// (Rule is time-based)
