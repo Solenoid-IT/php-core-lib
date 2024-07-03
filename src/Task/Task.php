@@ -2,7 +2,7 @@
 
 
 
-namespace Solenoid\Core\MVC;
+namespace Solenoid\Core\Task;
 
 
 
@@ -10,7 +10,7 @@ use \Solenoid\Core\App\App;
 
 
 
-class Controller
+class Task
 {
     public App $app;
 

@@ -6,7 +6,7 @@ namespace Solenoid\Core;
 
 
 
-use \Solenoid\Core\Task;
+use \Solenoid\Core\Task\SystemTask;
 
 use \Solenoid\System\JDB;
 use \Solenoid\System\Daemon;
@@ -50,38 +50,8 @@ class Scheduler
 
 
 
-    # Returns [assoc]
-    public static function fetch_rules (array $rules)
-    {
-        // (Setting the value)
-        $rr = [];
-
-        foreach ( $rules as $rule )
-        {// Processing each entry
-            // (Getting the value)
-            $parts = explode( ' ', $rule, 2 );
-
-            if ( in_array( $parts[0], [ 'EVERY', 'AT' ] ) )
-            {// (Rule is time-based)
-                // (Appending the value)
-                $rr['time'][] = $rule;
-            }
-            else
-            if ( in_array( $parts[0], [ 'ON' ] ) )
-            {// (Rule is event-based)
-                // (Appending the value)
-                $rr['event'][] = $rule;
-            }
-        }
-
-
-
-        // Returning the value
-        return $rr;
-    }
-
     # Returns [array<string>|null]
-    public static function verify_time_rules (array $rules, int $current_ts)
+    public static function verify_rules (array $rules, int $current_ts)
     {
         // (Getting the value)
         $day_ts = strtotime( date('Y-m-d') . ' 00:00:00' );
@@ -167,42 +137,6 @@ class Scheduler
 
         // Returning the value
         return $matches;
-    }
-
-    # Returns [string|false|null]
-    public function verify_event_rules (array $rules)
-    {
-        foreach ( $rules as $rule )
-        {// Processing each entry
-            // (Getting the value)
-            $parts = explode( ' ', $rule );
-
-            if ( $parts[0] !== 'ON' ) return null;
-
-
-
-            // (Getting the values)
-            $fi     = $parts[1];
-            $op     = $parts[2];
-            $value  = $parts[3];
-
-            $factor = $parts[5] ?? 1;
-            $unit   = $parts[6] ?? 'SECOND';
-
-
-
-            // (Getting the values)
-            $fi_parts    = explode( '::', $fi );
-
-            $task_id     = $fi_parts[0];
-            $task_method = $fi_parts[1];
-            $task_args   = array_map( function ($arg) { return trim( $arg, " \n\r\t\v\0\"'" ); }, explode( ',', trim( $fi_parts[2], "()" ) ) );
-
-
-
-            // (Starting the task)
-            Task::start( $task_id, $task_method, $task_args , $this->executor );
-        }
     }
 
 
@@ -315,10 +249,7 @@ class Scheduler
 
 
 
-                    // (Getting the value)
-                    $rules = self::fetch_rules( $task['rules'] );
-
-                    if ( $matched_rules = self::verify_time_rules( $rules['time'], $current_ts ) )
+                    if ( $matched_rules = self::verify_rules( $task['rules'], $current_ts ) )
                     {// (There is at least one of the time-rules matched)
                         // (Getting the value)
                         $task_class = $this->task_ns_prefix . str_replace( '/', '\\', $task_id );
@@ -349,8 +280,8 @@ class Scheduler
 
 
 
-                        // (Starting the process)
-                        $process = Process::start( "$this->executor " . $task_id . ' ' . $task['fn'] . ' ' . implode( ' ', array_map( function ($arg) { return "\"$arg\""; }, $task['args'] ) ) );
+                        // (Starting the task)
+                        $process = ( new SystemTask( $task_id, $task['fn'], array_map( function ($arg) { return "\"$arg\""; }, $task['args'] ), $this->executor ) )->start();
 
 
 
@@ -369,11 +300,6 @@ class Scheduler
 
                         // (Saving the JDB)
                         $this->db->save();
-                    }
-                    else
-                    if ( self::verify_event_rules( $rules['event'] ) )
-                    {// (At least one of the event-rules has been matched)
-                        // ahcid
                     }
                 }
             }
