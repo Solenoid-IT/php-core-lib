@@ -80,11 +80,16 @@ class Scheduler
         return $rr;
     }
 
-    # Returns [string|false|null]
+    # Returns [array<string>|null]
     public static function verify_time_rules (array $rules, int $current_ts)
     {
         // (Getting the value)
         $day_ts = strtotime( date('Y-m-d') . ' 00:00:00' );
+
+
+
+        // (Setting the value)
+        $matches = [];
 
         foreach ( $rules as $rule )
         {// Processing each entry
@@ -139,13 +144,17 @@ class Scheduler
 
                     if ( ( $current_ts - $start_ts ) % $duration === 0 )
                     {// (Delta-Timestamp is a multiple of duration)
-                        // Returning the value
-                        return $rule;
+                        // (Appending the value)
+                        $matches[] = $rule;
                     }
                 break;
 
                 case 'AT':
-                    if ( date( 'H:i:s', $current_ts ) === $parts[1] ) return $rule;
+                    if ( date( 'H:i:s', $current_ts ) === $parts[1] )
+                    {// (HMS is the same)
+                        // (Appending the value)
+                        $matches[] = $rule;
+                    }
                 break;
 
                 default:
@@ -157,7 +166,7 @@ class Scheduler
 
 
         // Returning the value
-        return false;
+        return $matches;
     }
 
     # Returns [string|false|null]
@@ -319,8 +328,8 @@ class Scheduler
                     // (Getting the value)
                     $rules = self::fetch_rules( $task['rules'] );
 
-                    if ( $rule = self::verify_time_rules( $rules['time'], $current_ts ) )
-                    {// (At least one of the time-rules has been matched)
+                    if ( $matched_rules = self::verify_time_rules( $rules['time'], $current_ts ) )
+                    {// (There is at least one of the rules matched)
                         // (Getting the value)
                         $task_class = $this->task_ns_prefix . str_replace( '/', '\\', $task_id );
 
@@ -356,7 +365,7 @@ class Scheduler
 
 
                         // Printing the value
-                        echo "\n\n" . date( 'c', $current_ts ) . " -> $task_class -> " . $rule . ( $process ? ' -> ' . $process->pid : '' ) . "\n\n";
+                        echo "\n\n" . date( 'c', $current_ts ) . " -> $task_class -> " . '[ ' . implode( ' ], [ ', $matched_rules ) . ' ]' . ( $process ? ' -> ' . $process->pid : '' ) . "\n\n";
 
 
 
