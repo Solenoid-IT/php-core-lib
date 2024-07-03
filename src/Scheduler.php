@@ -318,7 +318,7 @@ class Scheduler
 
                     // (Getting the value)
                     $rules = self::fetch_rules( $task['rules'] );
-die(print_r($rules));
+
                     if ( $rule = self::verify_time_rules( $rules['time'], $current_ts ) )
                     {// (At least one of the time-rules has been matched)
                         // (Getting the value)
