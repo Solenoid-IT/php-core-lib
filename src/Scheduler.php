@@ -154,8 +154,8 @@ class Scheduler
         (
             function ($signal)
             {
-                // (Initializing the JDB)
-                $this->db->init();
+                // (Removing the JDB)
+                $this->db->remove();
             }
         )
         ;
