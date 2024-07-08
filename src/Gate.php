@@ -6,9 +6,9 @@ namespace Solenoid\Core;
 
 
 
-class Gate
+interface Gate
 {
-    
+    public static function run ();
 }
 
 
