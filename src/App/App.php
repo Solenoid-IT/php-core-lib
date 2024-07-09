@@ -14,6 +14,10 @@ use \Solenoid\Core\Env;
 
 class App
 {
+    private static self $inst;
+
+
+
     public int    $ts;
 
     public string $basedir;
@@ -166,6 +170,27 @@ class App
     {
         // Returning the value
         return self::fetch_context() === 'http' ? 'request' : 'task';
+    }
+
+
+
+    # Returns [self]
+    public static function set (App &$app)
+    {
+        // (Getting the value)
+        self::$inst = &$app;
+
+
+
+        // Returning the value
+        return self::$inst;
+    }
+
+    # Returns [self]
+    public static function fetch ()
+    {
+        // Returning the value
+        return self::$inst;
     }
 }
 
