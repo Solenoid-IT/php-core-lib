@@ -175,10 +175,13 @@ class App
 
 
     # Returns [self]
-    public static function set (App &$app)
+    public static function register (App &$app)
     {
-        // (Getting the value)
-        self::$inst = &$app;
+        if ( !isset( self::$inst ) )
+        {// Value not found
+            // (Getting the value)
+            self::$inst = &$app;
+        }
 
 
 
