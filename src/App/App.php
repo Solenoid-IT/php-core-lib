@@ -187,7 +187,7 @@ class App
     }
 
     # Returns [self]
-    public static function fetch ()
+    public static function get ()
     {
         // Returning the value
         return self::$inst;
