@@ -9,6 +9,7 @@ namespace Solenoid\Core\App;
 use \Solenoid\Log\Logger;
 use \Solenoid\Core\Blade;
 use \Solenoid\Core\Env;
+use \Solenoid\Core\Storage;
 
 
 
@@ -18,32 +19,32 @@ class App
 
 
 
-    public int    $ts;
+    public int     $ts;
 
-    public string $basedir;
+    public string  $basedir;
 
-    public string $id;
-    public string $name;
+    public string  $id;
+    public string  $name;
 
-    public string $history;
+    public string  $history;
 
-    public string $gate;
-    public array  $middlewares;
+    public string  $gate;
+    public array   $middlewares;
 
-    public array  $loggers;
+    public array   $loggers;
 
-    public array  $args;
+    public array   $args;
 
-    public string $route_handler;
+    public string  $route_handler;
 
-    public Blade  $blade;
+    public Blade   $blade;
 
-    public Env    $env;
+    public Env     $env;
 
-    public string $credentials;
-    public string $storage;
+    public string  $credentials;
+    public Storage $storage;
 
-    public string $timezone;
+    public string  $timezone;
 
 
 
@@ -102,7 +103,7 @@ class App
 
         // (Getting the values)
         $this->credentials = $config['credentials'];
-        $this->storage     = $config['storage'];
+        $this->storage     = new Storage( $config['storage']['folder_path'], $config['storage']['chroot'] );
 
 
 
