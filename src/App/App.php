@@ -43,6 +43,8 @@ class App
     public string $credentials;
     public string $storage;
 
+    public string $timezone;
+
 
 
     # Returns [self] | Throws [Exception]
@@ -101,6 +103,14 @@ class App
         // (Getting the values)
         $this->credentials = $config['credentials'];
         $this->storage     = $config['storage'];
+
+
+
+        // (Getting the value)
+        $this->timezone = $config['timezone'] ?? date_default_timezone_get();
+
+        // (Setting the default timezone)
+        date_default_timezone_set( $this->timezone );
 
 
 
