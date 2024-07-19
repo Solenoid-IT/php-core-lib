@@ -37,7 +37,7 @@ class Scheduler
 
 
     # Returns [self]
-    public function __construct (string $basedir, ?string $tasks_folder_path = null, string $task_ns_prefix = 'App\\Task\\', ?JDB $db = null, ?JDB $config = null, string $executor = 'php bootstrap.php')
+    public function __construct (string $basedir, ?string $tasks_folder_path = null, string $task_ns_prefix = 'App\\Tasks\\', ?JDB $db = null, ?JDB $config = null, string $executor = 'php bootstrap.php')
     {
         // (Getting the values)
         $this->basedir           = $basedir;
