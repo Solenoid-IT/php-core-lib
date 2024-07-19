@@ -12,6 +12,10 @@ use \Solenoid\Core\Routing\Target;
 
 class SysApp extends App
 {
+    const NS_PREFIX = 'App\\Tasks\\';
+
+
+
     private static self $instance;
 
     public string  $host;
@@ -120,7 +124,7 @@ class SysApp extends App
 
 
         // (Getting the values)
-        $class  = 'App\\Task\\' . str_replace( '/', '\\', $args[0] );
+        $class  = self::NS_PREFIX . str_replace( '/', '\\', $args[0] );
         $method = $args[1];
 
 
