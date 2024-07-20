@@ -101,7 +101,7 @@ class Target
 
 
     // Returns [mixed|false] | Throws [Exception]
-    public function run ($data = null)
+    public function run (mixed $data = null)
     {
         try
         {
@@ -145,7 +145,7 @@ class Target
 
 
         // (Getting the value)
-        $app->args = &$this->args;
+        $app->target = &$this;
 
 
 

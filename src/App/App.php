@@ -10,6 +10,7 @@ use \Solenoid\Log\Logger;
 use \Solenoid\Core\Blade;
 use \Solenoid\Core\Env;
 use \Solenoid\Core\Storage;
+use \Solenoid\Core\Routing\Target;
 
 
 
@@ -33,8 +34,6 @@ class App
 
     public array   $loggers;
 
-    public array   $args;
-
     public string  $route_handler;
 
     public Blade   $blade;
@@ -45,6 +44,8 @@ class App
     public Storage $storage;
 
     public string  $timezone;
+
+    public ?Target $target;
 
 
 
@@ -83,11 +84,6 @@ class App
 
 
 
-        // (Setting the value)
-        $this->args = [];
-
-
-
         // (Getting the value)
         $this->route_handler = $config['route_handler'];
 
@@ -112,6 +108,11 @@ class App
 
         // (Setting the default timezone)
         date_default_timezone_set( $this->timezone );
+
+
+
+        // (Setting the value)
+        $this->target = null;
 
 
 
