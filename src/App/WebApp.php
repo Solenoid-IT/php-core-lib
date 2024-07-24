@@ -118,7 +118,7 @@ class WebApp extends App
 
 
 
-        if ( $target->class && $target->fn )
+        if ( isset( $target->class ) && isset( $target->fn ) )
         {// Values found
             // (Getting the value)
             $target->fa = array_values( $target->args );
