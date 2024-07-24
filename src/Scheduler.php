@@ -9,7 +9,7 @@ namespace Solenoid\Core;
 use \Solenoid\Core\Task\SystemTask;
 
 use \Solenoid\System\JDB;
-use \Solenoid\System\Daemon;
+use \Solenoid\System\SystemService;
 use \Solenoid\System\Process;
 
 
@@ -75,55 +75,73 @@ class Scheduler
 
 
 
+                    // (Getting the values)
+                    $start_ts = $parts[4] ? strtotime( $parts[4] ) : $day_ts;
+                    $end_ts   = $parts[6] ? strtotime( $parts[6] ) : false;
+
+
+
                     // (Getting the value)
-                    $start_ts   = $parts[4] ? strtotime( $parts[4] ) : $day_ts;
+                    $ts_exceeded = $end_ts !== false && $current_ts >= $end_ts;
+
+                    if ( !$ts_exceeded )
+                    {// Match OK
+                        switch ( $unit )
+                        {
+                            case 'SECOND':
+                            case 'MINUTE':
+                            case 'HOUR':
+                            case 'DAY':
+                                // (Getting the value)
+                                $duration = $factor * self::TIME_UNITS[$unit];
+                            break;
+
+                            case 'WEEK':
+                                // (Getting the value)
+                                $duration = strtotime( "+$factor week", $start_ts ) - $start_ts;
+                            break;
+
+                            case 'MONTH':
+                                // (Getting the value)
+                                $duration = strtotime( "+$factor month", $start_ts ) - $start_ts;
+                            break;
+
+                            case 'YEAR':
+                                // (Getting the value)
+                                $duration = strtotime( "+$factor year", $start_ts ) - $start_ts;
+                            break;
+
+                            default:
+                                // Returning the value
+                                return null;
+                        }
 
 
 
-                    switch ( $unit )
-                    {
-                        case 'SECOND':
-                        case 'MINUTE':
-                        case 'HOUR':
-                        case 'DAY':
-                            // (Getting the value)
-                            $duration = $factor * self::TIME_UNITS[$unit];
-                        break;
-
-                        case 'WEEK':
-                            // (Getting the value)
-                            $duration = strtotime( "+$factor week", $start_ts ) - $start_ts;
-                        break;
-
-                        case 'MONTH':
-                            // (Getting the value)
-                            $duration = strtotime( "+$factor month", $start_ts ) - $start_ts;
-                        break;
-
-                        case 'YEAR':
-                            // (Getting the value)
-                            $duration = strtotime( "+$factor year", $start_ts ) - $start_ts;
-                        break;
-
-                        default:
-                            // Returning the value
-                            return null;
-                    }
-
-
-
-                    if ( ( $current_ts - $start_ts ) % $duration === 0 )
-                    {// (Delta-Timestamp is a multiple of duration)
-                        // (Appending the value)
-                        $matches[] = $rule;
+                        if ( ( $current_ts - $start_ts ) % $duration === 0 )
+                        {// (Delta-Timestamp is a multiple of duration)
+                            // (Appending the value)
+                            $matches[] = $rule;
+                        }
                     }
                 break;
 
                 case 'AT':
-                    if ( date( 'H:i:s', $current_ts ) === $parts[1] )
-                    {// (HMS is the same)
-                        // (Appending the value)
-                        $matches[] = $rule;
+                    // (Getting the value)
+                    $end_ts = $parts[3] ? strtotime( $parts[3] ) : false;
+
+
+
+                    // (Getting the value)
+                    $ts_exceeded = $end_ts !== false && $current_ts >= $end_ts;
+
+                    if ( !$ts_exceeded )
+                    {// Match OK
+                        if ( date( 'H:i:s', $current_ts ) === $parts[1] )
+                        {// (HMS is the same)
+                            // (Appending the value)
+                            $matches[] = $rule;
+                        }
                     }
                 break;
 
@@ -144,8 +162,8 @@ class Scheduler
     # Returns [self]
     public function run ()
     {
-        // (Creating a Daemon)
-        $daemon = new Daemon();
+        // (Creating a SystemService)
+        $daemon = new SystemService();
 
 
 
