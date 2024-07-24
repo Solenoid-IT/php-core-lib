@@ -118,6 +118,14 @@ class WebApp extends App
 
 
 
+        if ( $target->class && $target->fn )
+        {// Values found
+            // (Getting the value)
+            $target->fa = &$target->args;
+        }
+
+
+
         // (Running the target)
         $target->run_app($this);
 
