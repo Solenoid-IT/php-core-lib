@@ -121,7 +121,7 @@ class WebApp extends App
         if ( $target->class && $target->fn )
         {// Values found
             // (Getting the value)
-            $target->fa = &$target->args;
+            $target->fa = array_values( $target->args );
         }
 
 
