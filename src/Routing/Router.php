@@ -56,7 +56,7 @@ class Router
                 {// Processing each entry
                     if ( $app_method !== $method ) continue;
 
-                    if ( $route[0] === '/' && $route[ strlen($route) - 1 ] === '/' )
+                    if ( $app_route[0] === '/' && $app_route[ strlen($app_route) - 1 ] === '/' )
                     {// (Route is defined as regex)
                         if ( preg_match( $app_route, $route, $matches ) === 1 )
                         {// Match OK
