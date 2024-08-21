@@ -34,8 +34,6 @@ class App
 
     public array   $loggers;
 
-    public string  $route_handler;
-
     public Blade   $blade;
 
     public Env     $env;
@@ -81,11 +79,6 @@ class App
                 $this->loggers[$context][$type] = new Logger($file_path);
             }
         }
-
-
-
-        // (Getting the value)
-        $this->route_handler = $config['route_handler'];
 
 
 
