@@ -36,7 +36,7 @@ class Route
         if ( is_string( $route ) )
         {// Value is a string
             // (Getting the values)
-            [ $method, $id ] = explode( ' ', $route );
+            [ $method, $id ] = explode( ' ', $route, 2 );
         }
         else
         {// Value is a Route 
