@@ -6,7 +6,7 @@ namespace Solenoid\Core\App;
 
 
 
-use \Solenoid\Core\Routing\Router;
+use \Solenoid\Core\Routing\Route;
 use \Solenoid\HTTP\Request;
 
 
@@ -15,13 +15,12 @@ class WebApp extends App
 {
     private static self $instance;
 
-    public Router  $router;
     public Request $request;
 
 
 
     # Returns [self] | Throws [Exception]
-    private function __construct (array $config, Router &$router)
+    private function __construct (array $config)
     {
         if ( parent::fetch_context() !== 'http' )
         {// Match failed
@@ -39,9 +38,6 @@ class WebApp extends App
 
         // (Calling the function)
         parent::__construct($config);
-
-        // (Getting the value)
-        $this->router = &$router;
 
 
 
@@ -78,12 +74,12 @@ class WebApp extends App
 
 
     # Returns [self] | Throws [Exception]
-    public static function init (array $config, Router &$router)
+    public static function init (array $config)
     {
         if ( !isset( self::$instance ) )
         {// Value not found
             // (Getting the value)
-            self::$instance = new self( $config, $router );
+            self::$instance = new self( $config );
         }
 
 
@@ -105,11 +101,11 @@ class WebApp extends App
     public function run ()
     {
         // (Resolving the route)
-        $target = $this->router->resolve( $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'] );
+        $target = Route::resolve( $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'] );
 
         if ( $target === false )
         {// (Target not found)
-            // (Setting the header)
+            // (Setting the status)
             http_response_code(404);
 
             // (Printing the value)
