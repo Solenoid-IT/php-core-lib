@@ -110,6 +110,11 @@ class WebApp extends App
 
             // (Printing the value)
             echo 'ROUTE NOT FOUND';
+
+
+
+            // Returning the value
+            return false;
         }
 
 
