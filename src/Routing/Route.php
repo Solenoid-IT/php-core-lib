@@ -163,8 +163,11 @@ class Route
 
         if ( !$target )
         {// Value not found
-            // (Getting the value)
-            $target = self::$fallback_target;
+            if ( isset( self::$fallback_target ) )
+            {// Value found
+                // (Getting the value)
+                $target = self::$fallback_target;
+            }
         }
 
 
