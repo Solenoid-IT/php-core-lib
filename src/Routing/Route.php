@@ -105,8 +105,6 @@ class Route
 
 
 
-                        /*
-
                         // (Getting the value)
                         $diff = array_diff( $id_parts, $defined_id_parts );
 
@@ -120,8 +118,6 @@ class Route
                             // Breaking the iteration
                             break 2;
                         }
-
-                        */
 
 
 
