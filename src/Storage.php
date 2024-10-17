@@ -14,17 +14,35 @@ use \Solenoid\System\Resource;
 
 class Storage
 {
-    private string $folder_path;
+    private static array $entries = [];
+
+    private string $path;
     private bool   $chroot;
 
 
 
     # Returns [self]
-    public function __construct (string $folder_path, bool $chroot = false)
+    public function __construct (string $path, bool $chroot = false)
     {
         // (Getting the values)
-        $this->folder_path = Directory::select( $folder_path )->normalize()->get_path();
-        $this->chroot      = $chroot;
+        $this->path   = Directory::select( $path )->normalize()->get_path();
+        $this->chroot = $chroot;
+    }
+
+
+
+    # Returns [void]
+    public static function add (string $id, Storage $storage)
+    {
+        // (Getting the value)
+        self::$entries[ $id ] = $storage;
+    }
+
+    # Returns [Storage|false]
+    public static function select (string $id)
+    {
+        // Returning the value
+        return self::$entries[ $id ] ?? false;
     }
 
 
@@ -33,7 +51,7 @@ class Storage
     public function verify_path (string $entry_path)
     {
         // Returning the value
-        return strpos( Resource::select( $this->folder_path . $entry_path )->normalize()->get_path(), $this->folder_path ) === 0;
+        return strpos( Resource::select( $this->path . $entry_path )->normalize()->get_path(), $this->path ) === 0;
     }
 
 
@@ -42,7 +60,7 @@ class Storage
     public function read (string $file_path)
     {
         // (Getting the value)
-        $abs_file_path = File::select( $this->folder_path . $file_path )->normalize()->get_path();
+        $abs_file_path = File::select( $this->path . $file_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -59,7 +77,7 @@ class Storage
     public function write (string $file_path, string $content = '', bool $append = false)
     {
         // (Getting the value)
-        $abs_file_path = File::select( $this->folder_path . $file_path )->normalize()->get_path();
+        $abs_file_path = File::select( $this->path . $file_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -86,7 +104,7 @@ class Storage
     public function get_type (string $entry_path)
     {
         // (Getting the value)
-        $abs_entry_path = Resource::select( $this->folder_path . $entry_path )->normalize()->get_path();
+        $abs_entry_path = Resource::select( $this->path . $entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -103,7 +121,7 @@ class Storage
     public function get_size (string $entry_path)
     {
         // (Getting the value)
-        $abs_entry_path = Resource::select( $this->folder_path . $entry_path )->normalize()->get_path();
+        $abs_entry_path = Resource::select( $this->path . $entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -135,7 +153,7 @@ class Storage
     public function move (string $src_entry_path, string $dst_entry_path)
     {
         // (Getting the value)
-        $abs_src_entry_path = Resource::select( $this->folder_path . $src_entry_path )->normalize()->get_path();
+        $abs_src_entry_path = Resource::select( $this->path . $src_entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -145,7 +163,7 @@ class Storage
 
 
         // (Getting the value)
-        $abs_dst_entry_path = Resource::select( $this->folder_path . $dst_entry_path )->normalize()->get_path();
+        $abs_dst_entry_path = Resource::select( $this->path . $dst_entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -170,7 +188,7 @@ class Storage
     public function copy (string $src_entry_path, string $dst_entry_path)
     {
         // (Getting the value)
-        $abs_src_entry_path = Resource::select( $this->folder_path . $src_entry_path )->normalize()->get_path();
+        $abs_src_entry_path = Resource::select( $this->path . $src_entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -180,7 +198,7 @@ class Storage
 
 
         // (Getting the value)
-        $abs_dst_entry_path = Resource::select( $this->folder_path . $dst_entry_path )->normalize()->get_path();
+        $abs_dst_entry_path = Resource::select( $this->path . $dst_entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -205,7 +223,7 @@ class Storage
     public function remove (string $entry_path)
     {
         // (Getting the value)
-        $abs_entry_path = Resource::select( $this->folder_path . $entry_path )->normalize()->get_path();
+        $abs_entry_path = Resource::select( $this->path . $entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
         {// Value is true
@@ -232,7 +250,7 @@ class Storage
     public function __toString ()
     {
         // Returning the value
-        return $this->folder_path;
+        return $this->path;
     }
 }
 

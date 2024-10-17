@@ -7,12 +7,15 @@ namespace Solenoid\Core\Routing;
 
 
 use \Solenoid\Core\App\App;
-use \Solenoid\Perf\Analyzer;
 
 
 
 class Target
 {
+    private static array $events = [];
+
+
+
     public array $middleware_groups;
     public array $tags;
 
@@ -100,6 +103,25 @@ class Target
 
 
 
+    # Returns [void]
+    public static function on (string $type, callable $function)
+    {
+        // (Getting the value)
+        self::$events[ $type ][] = $function;
+    }
+
+    # Returns [void]
+    public static function trigger_event (string $type, array $data = [])
+    {
+        foreach ( self::$events[ $type ] as $function )
+        {// Processing each entry
+            // (Calling the function)
+            $function( $data );
+        }
+    }
+
+
+
     // Returns [mixed|false] | Throws [Exception]
     public function run (mixed $data = null)
     {
@@ -138,12 +160,6 @@ class Target
     // Returns [self|false] | Throws [Exception]
     public function run_app (App &$app)
     {
-        // (Getting the values)
-        $app_context   = App::fetch_context();
-        $app_initiator = App::fetch_initiator();
-
-
-
         // (Getting the value)
         $app->target = &$this;
 
@@ -151,14 +167,8 @@ class Target
 
         try
         {
-            if ( $app->loggers[$app_context]['activity'] )
-            {// Value found
-                // (Creating an Analyzer)
-                $performance_analyzer = Analyzer::create();
-
-                // (Opening the analyzer)
-                $performance_analyzer->open();
-            }
+            // (Triggering the event)
+            self::trigger_event( 'before-gate' );
 
 
 
@@ -173,18 +183,15 @@ class Target
                 foreach ( $this->middleware_groups as $group )
                 {// Processing each entry
                     // (Getting the value)
-                    $middlewares = $app->middlewares[$group];
+                    $middlewares = $app->middlewares[ $group ];
 
-                    if ( !isset($middlewares) )
+                    if ( !isset( $middlewares ) )
                     {// (Group not found)
-                        if ( $app->loggers[$app_context]['error'] )
-                        {// Value found
-                            // (Getting the value)
-                            $message = "Middleware group '$group' not found";
+                        // (Getting the value)
+                        $message = "Middleware group '$group' not found";
 
-                            // (Pushing the message)
-                            $app->loggers[$app_context]['error']->push( $app->{ $app_initiator } . ' -> ' . $message );
-                        }
+                        // (Triggering the event)
+                        self::trigger_event( 'error', [ 'message' => $message ] );
 
 
 
@@ -238,16 +245,8 @@ class Target
 
 
 
-            if ( $app->loggers[$app_context]['activity'] )
-            {// Value found
-                // (Closing the analyzer)
-                $performance_analyzer->close();
-
-
-
-                // (Pushing the message)
-                $app->loggers[$app_context]['activity']->push( ( $app->{ $app_initiator } ) . ' -> ' . $performance_analyzer );
-            }
+            // (Triggering the event)
+            self::trigger_event( 'after-gate' );
         }
         catch (\Exception $e)
         {
@@ -256,19 +255,8 @@ class Target
 
 
 
-            if ( $app_context === 'http' )
-            {// Match OK
-                // (Setting the response-code)
-                http_response_code(500);
-            }
-
-
-
-            if ( $app->loggers[$app_context]['error'] )
-            {// Value found
-                // (Pushing the message)
-                $app->loggers[$app_context]['error']->push( $app->{ $app_initiator } . ' -> ' . $message );
-            }
+            // (Triggering the event)
+            self::trigger_event( 'error', [ 'message' => $message ] );
 
 
 
