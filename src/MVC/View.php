@@ -6,57 +6,66 @@ namespace Solenoid\Core\MVC;
 
 
 
-use \Solenoid\Core\App\App;
+use \Solenoid\Core\Blade;
 
 
 
 class View
 {
-    private static $instance;
+    private static Blade $blade;
 
-    protected static App $app;
+    public string $value;
 
 
 
     # Returns [self]
-    private function __construct (App &$app)
+    public function __construct (string &$value)
     {
         // (Getting the value)
-        self::$app = &$app;
+        $this->value = &$value;
     }
 
 
 
-    # Returns [self]
-    public static function init (App &$app)
+    # Returns [void]
+    public static function config (string $views_folder_path, string $cache_folder_path)
     {
-        if ( !isset( self::$instance ) )
-        {// Value not found
-            // (Getting the value)
-            self::$instance = new self($app);
-        }
-
-
-
-        // Returning the value
-        return self::$instance;
+        // (Getting the value)
+        self::$blade = new Blade( $views_folder_path, $cache_folder_path );
     }
 
 
 
-    # Returns [string] | Throws [Exception]
+    # Returns [View]
     public static function build (string $blade_file_path, array $kv_data = [])
     {
-        // (Building the content with blade)
-        return self::$app->blade->build( $blade_file_path, $kv_data );
-
+        // Returning the value
+        return new View( self::$blade->build( $blade_file_path, $kv_data ) );
     }
 
-    # Returns [string] | Throws [Exception]
+    # Returns [View]
     public static function build_html (string $blade_file_path, array $kv_data = [], array $js_vars = [])
     {
         // Returning the value
-        return self::$app->blade->build_html( $blade_file_path, $kv_data, $js_vars );
+        return new View( self::$blade->build_html( $blade_file_path, $kv_data, $js_vars ) );
+    }
+
+
+
+    # Returns [void]
+    public function render ()
+    {
+        // Printing the value
+        echo $this;
+    }
+
+
+
+    # Returns [string]
+    public function __toString ()
+    {
+        // Returning the value
+        return $this->value;
     }
 }
 
