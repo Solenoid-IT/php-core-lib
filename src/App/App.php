@@ -72,11 +72,6 @@ abstract class App
         // (Setting the ini)
         ini_set( 'display_errors', $this->env->type === 'dev' ? 'on' : 'off' );
         ini_set( 'display_startup_errors', $this->env->type === 'dev' ? 'on' : 'off' );
-
-
-
-        // (Setting the value)
-        $this->target = null;
     }
 
 
