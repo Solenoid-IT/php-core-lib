@@ -15,13 +15,13 @@ abstract class App
 {
     public static string $mode;
 
-    public string  $basedir;
-    public string  $id;
-    public string  $name;
-    public string  $timezone;
+    public static string  $basedir;
+    public static string  $id;
+    public static string  $name;
+    public static string  $timezone;
 
-    public ?Env    $env;
-    public ?Target $target;
+    public static ?Env    $env;
+    public static ?Target $target;
 
 
 
@@ -29,18 +29,18 @@ abstract class App
     public function __construct (array $config)
     {
         // (Getting the values)
-        $this->basedir = realpath( $config['basedir'] );
+        self::$basedir = realpath( $config['basedir'] );
 
-        $this->id      = $config['id'];
-        $this->name    = $config['name'];
+        self::$id      = $config['id'];
+        self::$name    = $config['name'];
 
 
 
         // (Getting the value)
-        $this->timezone = $config['timezone'] ?? date_default_timezone_get();
+        self::$timezone = $config['timezone'] ?? date_default_timezone_get();
 
         // (Setting the default timezone)
-        date_default_timezone_set( $this->timezone );
+        date_default_timezone_set( self::$timezone );
 
 
 
@@ -55,7 +55,7 @@ abstract class App
 
 
         // (Setting the cwd)
-        chdir( $this->basedir );
+        chdir( self::$basedir );
 
 
 
@@ -65,13 +65,13 @@ abstract class App
 
 
         // (Getting the value)
-        $this->env = $env ? $env : null;
+        self::$env = $env ? $env : null;
 
 
 
         // (Setting the ini)
-        ini_set( 'display_errors', $this->env->type === 'dev' ? 'on' : 'off' );
-        ini_set( 'display_startup_errors', $this->env->type === 'dev' ? 'on' : 'off' );
+        ini_set( 'display_errors', self::$env->type === 'dev' ? 'on' : 'off' );
+        ini_set( 'display_startup_errors', self::$env->type === 'dev' ? 'on' : 'off' );
     }
 
 
