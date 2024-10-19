@@ -162,7 +162,7 @@ class Target
     public function run_app (App &$app)
     {
         // (Getting the value)
-        $app->target = &$this;
+        App::$target = &$this;
 
 
 
