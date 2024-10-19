@@ -6,6 +6,7 @@ namespace Solenoid\Core\App;
 
 
 
+use \Solenoid\Core\App\App;
 use \Solenoid\Core\Routing\Route;
 
 
@@ -24,7 +25,7 @@ class WebApp extends App
     # Returns [self|false]
     public function run ()
     {
-        if ( !$this->env )
+        if ( !App::$env )
         {// Value not found
             // (Setting the status)
             http_response_code( 404 );
