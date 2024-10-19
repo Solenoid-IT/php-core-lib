@@ -52,7 +52,7 @@ class Env
         // (Setting the value)
         $host = null;
 
-        switch ( App::fetch_context() )
+        switch ( App::$mode )
         {
             case 'cli':
                 // (Getting the value)
