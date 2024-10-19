@@ -6,9 +6,18 @@ namespace Solenoid\Core;
 
 
 
-interface Gate
+class Gate
 {
-    public static function run ();
+    public static string $class_path;
+
+
+
+    # Returns [void]
+    public static function config (string $class_path)
+    {
+        // (Getting the value)
+        self::$class_path = $class_path;
+    }
 }
 
 

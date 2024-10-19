@@ -7,6 +7,7 @@ namespace Solenoid\Core\Routing;
 
 
 use \Solenoid\Core\App\App;
+use \Solenoid\Core\Middleware;
 
 
 
@@ -104,16 +105,16 @@ class Target
 
 
     # Returns [void]
-    public static function on (string $type, callable $function)
+    public static function on (string $event_type, callable $function)
     {
         // (Getting the value)
-        self::$events[ $type ][] = $function;
+        self::$events[ $event_type ][] = $function;
     }
 
     # Returns [void]
-    public static function trigger_event (string $type, array $data = [])
+    public static function trigger_event (string $event_type, array $data = [])
     {
-        foreach ( self::$events[ $type ] as $function )
+        foreach ( self::$events[ $event_type ] as $function )
         {// Processing each entry
             // (Calling the function)
             $function( $data );
@@ -173,7 +174,7 @@ class Target
 
 
             // (Calling the user function by array)
-            $gate_lock = call_user_func_array( [ $app->gate, 'run' ], [  ] ) === false;
+            $gate_lock = call_user_func_array( [ \App\Gate::class, 'run' ], [  ] ) === false;
 
             if ( !$gate_lock )
             {// (There is no a gate lock)
@@ -183,9 +184,9 @@ class Target
                 foreach ( $this->middleware_groups as $group )
                 {// Processing each entry
                     // (Getting the value)
-                    $middlewares = $app->middlewares[ $group ];
+                    $middlewares = Middleware::fetch( $group );
 
-                    if ( !isset( $middlewares ) )
+                    if ( $middlewares === false )
                     {// (Group not found)
                         // (Getting the value)
                         $message = "Middleware group '$group' not found";
