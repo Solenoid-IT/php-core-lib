@@ -17,7 +17,7 @@ class SysApp extends App
 
 
 
-    public static Target $target;
+    public static Target $requested_target;
     public static string $task;
 
 
@@ -76,12 +76,12 @@ class SysApp extends App
 
 
         // (Getting the value)
-        self::$target = &$target;
+        self::$requested_target = &$target;
 
 
 
         // (Getting the value)
-        self::$task = self::$target->class . '::' . self::$target->fn . '()';
+        self::$task = self::$requested_target->class . '::' . self::$requested_target->fn . '()';
     }
 
 
@@ -103,7 +103,7 @@ class SysApp extends App
 
 
         // (Running the target)
-        self::$target->run_app( $this );
+        self::$requested_target->run_app( $this );
 
 
 
