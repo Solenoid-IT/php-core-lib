@@ -13,7 +13,7 @@ use \Solenoid\Core\Routing\Target;
 
 abstract class App
 {
-    public static string $mode;
+    public static string  $mode;
 
     public static string  $basedir;
     public static string  $id;
