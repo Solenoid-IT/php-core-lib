@@ -13,6 +13,10 @@ use \Solenoid\Core\Routing\Target;
 
 class SysApp extends App
 {
+    const NS_PREFIX = 'App\\Tasks\\';
+
+
+
     public static string $task;
 
 
