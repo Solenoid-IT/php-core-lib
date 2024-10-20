@@ -150,6 +150,31 @@ class Storage
 
 
     # Returns [self|false]
+    public function make_dir (string $path)
+    {
+        // (Getting the value)
+        $abs_entry_path = Resource::select( $this->path . $path )->normalize()->get_path();
+
+        if ( $this->chroot )
+        {// Value is true
+            if ( !$this->verify_path( $path ) ) return false;
+        }
+
+
+
+        if ( Directory::select( $abs_entry_path )->make() === false )
+        {// (Unable to make the directory)
+            // Returning the value
+            return false;
+        }
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    # Returns [self|false]
     public function move (string $src_entry_path, string $dst_entry_path)
     {
         // (Getting the value)
