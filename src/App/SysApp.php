@@ -17,6 +17,7 @@ class SysApp extends App
 
 
 
+    public static Target $target;
     public static string $task;
 
 
@@ -26,24 +27,6 @@ class SysApp extends App
     {
         // (Calling the function)
         parent::__construct( $config );
-    }
-
-
-
-    # Returns [self|false]
-    public function run ()
-    {
-        if ( !App::$env )
-        {// Value not found
-            // Printing the value
-            echo 'ENV NOT FOUND';
-
-
-
-            // Returning the value
-            return false;
-        }
-
 
 
 
@@ -92,13 +75,35 @@ class SysApp extends App
 
 
 
-        // (Running the target)
-        $target->run_app( $this );
+        // (Getting the value)
+        self::$target = &$target;
 
 
 
         // (Getting the value)
-        self::$task = "$class::$method()";
+        self::$task = self::$target->class . '::' . self::$target->fn . '()';
+    }
+
+
+
+    # Returns [self|false]
+    public function run ()
+    {
+        if ( !App::$env )
+        {// Value not found
+            // Printing the value
+            echo 'ENV NOT FOUND';
+
+
+
+            // Returning the value
+            return false;
+        }
+
+
+
+        // (Running the target)
+        self::$target->run_app( $this );
 
 
 
