@@ -271,6 +271,25 @@ class Storage
 
 
 
+    # Returns [bool]
+    public function file_exists (string $path)
+    {
+        // (Getting the value)
+        $abs_entry_path = Resource::select( $this->path . $path )->normalize()->get_path();
+
+        if ( $this->chroot )
+        {// Value is true
+            if ( !$this->verify_path( $path ) ) return false;
+        }
+
+
+
+        // Returning the value
+        return File::select( $abs_entry_path )->exists();
+    }
+
+
+
     # Returns [string]
     public function __toString ()
     {
