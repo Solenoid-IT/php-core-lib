@@ -288,6 +288,23 @@ class Storage
         return File::select( $abs_entry_path )->exists();
     }
 
+    # Returns [bool]
+    public function dir_exists (string $path)
+    {
+        // (Getting the value)
+        $abs_entry_path = Resource::select( $this->path . $path )->normalize()->get_path();
+
+        if ( $this->chroot )
+        {// Value is true
+            if ( !$this->verify_path( $path ) ) return false;
+        }
+
+
+
+        // Returning the value
+        return Directory::select( $abs_entry_path )->exists();
+    }
+
 
 
     # Returns [string]
