@@ -19,16 +19,18 @@ class Storage
     private string $path;
     private bool   $chroot;
     private array  $users;
+    private ?int   $umask;
 
 
 
     # Returns [self]
-    public function __construct (string $path, bool $chroot = false, array $users = [])
+    public function __construct (string $path, bool $chroot = false, array $users = [], ?int $umask = null)
     {
         // (Getting the values)
         $this->path   = Directory::select( $path )->normalize()->get_path();
         $this->chroot = $chroot;
         $this->users  = $users;
+        $this->umask  = $umask;
     }
 
 
@@ -116,7 +118,7 @@ class Storage
 
 
 
-        if ( File::select( $abs_file_path )->write( $content, $append ? 'append' : 'replace' ) === false )
+        if ( File::select( $abs_file_path )->write( $content, ( $append ? 'append' : 'replace' ), $this->umask ) === false )
         {// (Unable to write to the file)
             // Returning the value
             return false;
@@ -234,7 +236,7 @@ class Storage
 
 
 
-        if ( Directory::select( $abs_entry_path )->make() === false )
+        if ( Directory::select( $abs_entry_path )->make( $this->umask ) === false )
         {// (Unable to make the directory)
             // Returning the value
             return false;
