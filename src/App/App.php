@@ -79,9 +79,14 @@ abstract class App
 
 
 
+        // (Getting the value)
+        self::$mode = isset( $_SERVER['REQUEST_METHOD'] ) ? 'http' : 'cli';
+
+
+
         // (Setting the ini)
-        ini_set( 'display_errors', 'off' );
-        ini_set( 'display_startup_errors', 'off' );
+        ini_set( 'display_errors', self::$mode === 'http' ? 'on' : 'off' );
+        ini_set( 'display_startup_errors', self::$mode === 'http' ? 'on' : 'off' );
     }
 
 
