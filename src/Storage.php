@@ -18,15 +18,17 @@ class Storage
 
     private string $path;
     private bool   $chroot;
+    private array  $users;
 
 
 
     # Returns [self]
-    public function __construct (string $path, bool $chroot = false)
+    public function __construct (string $path, bool $chroot = false, array $users = [])
     {
         // (Getting the values)
         $this->path   = Directory::select( $path )->normalize()->get_path();
         $this->chroot = $chroot;
+        $this->users  = $users;
     }
 
 
@@ -69,6 +71,20 @@ class Storage
 
 
 
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
         // Returning the value
         return File::select( $abs_file_path )->read();
     }
@@ -82,6 +98,31 @@ class Storage
         if ( $this->chroot )
         {// Value is true
             if ( !$this->verify_path( $file_path ) ) return false;
+        }
+
+
+
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
+        // (Getting the value)
+        $file_owner = posix_getpwuid( fileowner( $abs_file_path ) )['name'];
+
+        if ( $current_user !== $file_owner )
+        {// Match failed
+            // (Executing the cmd)
+            system( "sudo chown $current_user \"$abs_file_path\"" );
         }
 
 
@@ -113,6 +154,20 @@ class Storage
 
 
 
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
         // Returning the value
         return Resource::select( $abs_entry_path )->get_type();
     }
@@ -126,6 +181,20 @@ class Storage
         if ( $this->chroot )
         {// Value is true
             if ( !$this->verify_path( $entry_path ) ) return false;
+        }
+
+
+
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
         }
 
 
@@ -162,6 +231,20 @@ class Storage
 
 
 
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
         if ( Directory::select( $abs_entry_path )->make() === false )
         {// (Unable to make the directory)
             // Returning the value
@@ -183,6 +266,20 @@ class Storage
         if ( $this->chroot )
         {// Value is true
             if ( !$this->verify_path( $src_entry_path ) ) return false;
+        }
+
+
+
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
         }
 
 
@@ -223,6 +320,20 @@ class Storage
 
 
         // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
+        // (Getting the value)
         $abs_dst_entry_path = Resource::select( $this->path . $dst_entry_path )->normalize()->get_path();
 
         if ( $this->chroot )
@@ -257,6 +368,20 @@ class Storage
 
 
 
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
         if ( Resource::select( $abs_entry_path )->remove() === false )
         {// (Unable to remove the entry)
             // Returning the value
@@ -284,6 +409,20 @@ class Storage
 
 
 
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
         // Returning the value
         return File::select( $abs_entry_path )->exists();
     }
@@ -297,6 +436,20 @@ class Storage
         if ( $this->chroot )
         {// Value is true
             if ( !$this->verify_path( $path ) ) return false;
+        }
+
+
+
+        // (Getting the value)
+        $current_user = get_current_user();
+
+        if ( $this->users )
+        {// Value is not empty
+            if ( !in_array( $current_user, $this->users ) )
+            {// Match failed
+                // Returning the value
+                return false;
+            }
         }
 
 
