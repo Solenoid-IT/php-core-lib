@@ -46,7 +46,7 @@ class Logger
     # Returns [self|false]
     public function push (string $message)
     {
-        if ( File::select( $this->file_path )->write( date('c') . ' :: ' . $message . "\n", 'append' ) === false )
+        if ( File::select( $this->file_path )->write( date('c') . ' :: ' . str_replace( "\n", "\\n", $message ) . "\n", 'append' ) === false )
         {// (Unable to write to the file)
             // Returning the value
             return false;
