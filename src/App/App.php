@@ -69,9 +69,19 @@ abstract class App
 
 
 
+        /*
+
         // (Setting the ini)
         ini_set( 'display_errors', self::$env->type === 'dev' ? 'on' : 'off' );
         ini_set( 'display_startup_errors', self::$env->type === 'dev' ? 'on' : 'off' );
+
+        */
+
+
+
+        // (Setting the ini)
+        ini_set( 'display_errors', 'off' );
+        ini_set( 'display_startup_errors', 'off' );
     }
 
 
