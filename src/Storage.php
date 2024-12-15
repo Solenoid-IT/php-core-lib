@@ -116,20 +116,6 @@ class Storage
 
 
 
-        if ( file_exists( $abs_file_path ) )
-        {// (File found)
-            // (Getting the value)
-            $file_owner = posix_getpwuid( fileowner( $abs_file_path ) )['name'];
-
-            if ( $current_user !== $file_owner )
-            {// Match failed
-                // (Executing the cmd)
-                system( "sudo chown $current_user \"$abs_file_path\"" );
-            }
-        }
-
-
-
         if ( File::select( $abs_file_path )->write( $content, $append ? 'append' : 'replace' ) === false )
         {// (Unable to write to the file)
             // Returning the value
