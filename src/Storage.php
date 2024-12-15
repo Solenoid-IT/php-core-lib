@@ -116,13 +116,16 @@ class Storage
 
 
 
-        // (Getting the value)
-        $file_owner = posix_getpwuid( fileowner( $abs_file_path ) )['name'];
+        if ( file_exists( $abs_file_path ) )
+        {// (File found)
+            // (Getting the value)
+            $file_owner = posix_getpwuid( fileowner( $abs_file_path ) )['name'];
 
-        if ( $current_user !== $file_owner )
-        {// Match failed
-            // (Executing the cmd)
-            system( "sudo chown $current_user \"$abs_file_path\"" );
+            if ( $current_user !== $file_owner )
+            {// Match failed
+                // (Executing the cmd)
+                system( "sudo chown $current_user \"$abs_file_path\"" );
+            }
         }
 
 
