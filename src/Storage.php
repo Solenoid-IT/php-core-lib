@@ -451,6 +451,29 @@ class Storage
 
 
 
+    # Returns [self|false]
+    public function build ()
+    {
+        // (Setting the value)
+        $basedir = '/';
+
+        if ( !$this->dir_exists( $basedir ) )
+        {// (Directory not found)
+            if ( !$this->make_dir( $basedir ) )
+            {// (Unable to make the directory)
+                // Returning the value
+                return false;
+            }
+        }
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
     # Returns [string]
     public function __toString ()
     {
