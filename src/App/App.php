@@ -80,7 +80,7 @@ abstract class App
 
 
         // (Getting the value)
-        self::$mode = isset( $_SERVER['REQUEST_METHOD'] ) ? 'http' : 'cli';
+        self::$mode = self::fetch_mode();
 
 
 
@@ -91,11 +91,20 @@ abstract class App
 
 
 
+    # Returns [string]
+    public static function fetch_mode ()
+    {
+        // Returning the value
+        return isset( $_SERVER['REQUEST_METHOD'] ) ? 'http' : 'cli';
+    }
+
+
+
     # Returns [void]
     public static function detect_mode ()
     {
         // (Getting the value)
-        self::$mode = isset( $_SERVER['REQUEST_METHOD'] ) ? 'http' : 'cli';
+        self::$mode = self::fetch_mode();
     }
 
 
