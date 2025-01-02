@@ -13,7 +13,7 @@ class Store
 
 
     # Returns [mixed|false]
-    protected function get (string $id)
+    public function get (string $id)
     {
         // Returning the value
         return $this->values[ $id ] ?? false;
