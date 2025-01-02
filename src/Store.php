@@ -20,10 +20,10 @@ class Store
     }
 
     # Returns [void]
-    protected function set (string $id, mixed $value)
+    protected function set (string $id, mixed &$value)
     {
         // (Getting the value)
-        $this->values[ $id ] = $value;
+        $this->values[ $id ] = &$value;
     }
 }
 
