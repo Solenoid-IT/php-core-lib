@@ -6,7 +6,7 @@ namespace Solenoid\Core\Task;
 
 
 
-use \Solenoid\System\Process;
+use \Solenoid\OS\Process;
 
 
 
@@ -16,6 +16,9 @@ class SystemTask
     public string  $fn;
     public array   $args;
     public string  $executor;
+
+    public string  $cwd;
+    public string  $input;
 
 
 
@@ -31,18 +34,44 @@ class SystemTask
 
 
 
-    # Returns [string]
+    # Returns [self]
+    public function set_cwd (string $cwd)
+    {
+        // (Getting the value)
+        $this->cwd = $cwd;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    # Returns [self]
+    public function set_input (string $input)
+    {
+        // (Getting the value)
+        $this->input = $input;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
+    # Returns [Process]
     public function run ()
     {
         // Returning the value
-        return trim( shell_exec($this) );
+        return new Process( $this, $this->cwd );
     }
 
     # Returns [Process|false]
     public function start ()
     {
         // Returning the value
-        return Process::start($this);
+        return Process::spawn( $this, $this->cwd, $this->input );
     }
 
 

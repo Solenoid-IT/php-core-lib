@@ -41,7 +41,7 @@ class SysApp extends App
         if ( count($args) < 2 )
         {// (There are no args)
             // Printing the value
-            echo "\n\nphp $argv[0] <task> <method> ...<args>\n\n";
+            echo "\nphp $argv[0] <task> <method> ...<args>\n\n";
 
 
 
@@ -96,6 +96,14 @@ class SysApp extends App
 
 
 
+            // Returning the value
+            return false;
+        }
+
+
+
+        if ( !isset( $this->requested_target ) )
+        {// Value not found
             // Returning the value
             return false;
         }
