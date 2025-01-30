@@ -17,8 +17,8 @@ class SystemTask
     public array   $args;
     public string  $executor;
 
-    public string  $cwd;
-    public string  $input;
+    public ?string  $cwd;
+    public ?string  $input;
 
 
 
@@ -30,6 +30,12 @@ class SystemTask
         $this->fn       = $fn;
         $this->args     = $args;
         $this->executor = $executor;
+
+
+
+        // (Setting the values)
+        $this->cwd      = null;
+        $this->input    = null;
     }
 
 
