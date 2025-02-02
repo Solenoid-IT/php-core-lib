@@ -41,7 +41,7 @@ class SystemTask
 
 
     # Returns [self]
-    public function set_cwd (string $cwd)
+    public function set_cwd (?string $cwd = null)
     {
         // (Getting the value)
         $this->cwd = $cwd;
@@ -53,7 +53,7 @@ class SystemTask
     }
 
     # Returns [self]
-    public function set_input (string $input)
+    public function set_input (?string $input = null)
     {
         // (Getting the value)
         $this->input = $input;
@@ -70,7 +70,7 @@ class SystemTask
     public function run ()
     {
         // Returning the value
-        return ( new Process( $this, $this->cwd ) )->run();
+        return ( new Process( $this ) )->set_cwd( $this->cwd )->set_input( $this->input )->run();
     }
 
     # Returns [Process|false]
