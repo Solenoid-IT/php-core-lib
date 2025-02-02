@@ -66,11 +66,11 @@ class SystemTask
 
 
 
-    # Returns [Process]
+    # Returns [Process|false]
     public function run ()
     {
         // Returning the value
-        return new Process( $this, $this->cwd );
+        return ( new Process( $this, $this->cwd ) )->run();
     }
 
     # Returns [Process|false]
