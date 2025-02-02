@@ -6,6 +6,8 @@ namespace Solenoid\Core\Task;
 
 
 
+use \Solenoid\Core\App\App;
+
 use \Solenoid\OS\Process;
 
 
@@ -33,9 +35,13 @@ class SystemTask
 
 
 
-        // (Setting the values)
-        $this->cwd      = null;
-        $this->input    = null;
+        // (Getting the value)
+        $this->cwd = App::$basedir;
+
+
+
+        // (Setting the value)
+        $this->input = null;
     }
 
 
