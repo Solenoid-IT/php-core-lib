@@ -228,8 +228,8 @@ class Route
 
         if ( $target )
         {// Value found
-            // (Getting the value)
-            $target->args = &$params;
+            // (Setting the args)
+            $target->set_args( $params );
         }
 
 
