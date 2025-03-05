@@ -60,6 +60,8 @@ class WebApp extends App
 
 
 
+        /*
+
         if ( isset( $target->class ) && isset( $target->fn ) )
         {// Values found
             // (Getting the value)
@@ -70,6 +72,67 @@ class WebApp extends App
 
         // (Running the target)
         $target->run_app( $this );
+
+        */
+
+
+
+        try
+        {
+            // (Triggering the event)
+            App::trigger_event( 'start' );
+
+
+
+            // (Getting the value)
+            $gate_lock = call_user_func_array( [ \App\Gate::class, 'run' ], [] ) === false;
+
+            if ( !$gate_lock )
+            {// (There is no a gate lock)
+                // (Getting the value)
+                $response = $target->run();
+
+                if ( $response !== $target )
+                {// (There is no a middleware lock)
+                    if ( $response !== null )
+                    {// (Function returns something)
+                        // (Setting the header)
+                        header('Content-Type: application/json');
+
+                        // Printing the value
+                        echo json_encode( $response );
+                    }
+                }
+            }
+
+
+
+            // (Triggering the event)
+            App::trigger_event( 'end' );
+        }
+        catch (\Exception $e)
+        {
+            // (Getting the value)
+            $message = (string) $e;
+
+
+
+            // (Triggering the event)
+            App::trigger_event( 'error', [ 'message' => $message ] );
+
+
+
+            if ( App::$env->type === 'dev' )
+            {// Match OK
+                // Throwing an exception
+                throw $e;
+            }
+
+
+
+            // Returning the value
+            return false;
+        }
 
 
 

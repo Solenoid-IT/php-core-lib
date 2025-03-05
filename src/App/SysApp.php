@@ -58,20 +58,23 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $target_args = array_slice( $args, 2 );
+        #$target_args = array_slice( $args, 2 );
 
 
 
         // (Getting the value)
-        $target = Target::link( $class, $method, $target_args );
+        $target = Target::link( $class, $method );
+
+        // (Setting the args)
+        $target->set_args( array_slice( $args, 2 ) );
 
 
 
         // (Getting the value)
-        $target->args = &$target_args;
+        #$target->args = &$target_args;
 
         // (Getting the value)
-        $target->tags = &$class::$tags;
+        #$target->tags = &$class::$tags;
 
 
 
@@ -81,7 +84,7 @@ class SysApp extends App
 
 
         // (Getting the value)
-        $this->task = $this->requested_target->class . '::' . $this->requested_target->fn . '()';
+        $this->task = (string) $target;
     }
 
 
@@ -107,11 +110,67 @@ class SysApp extends App
             // Returning the value
             return false;
         }
+        
+
+
+        // (Getting the value)
+        $target = $this->requested_target;
 
 
 
-        // (Running the target)
-        $this->requested_target->run_app( $this );
+        try
+        {
+            // (Triggering the event)
+            App::trigger_event( 'start' );
+
+
+
+            // (Getting the value)
+            $gate_lock = call_user_func_array( [ \App\Gate::class, 'run' ], [] ) === false;
+
+            if ( !$gate_lock )
+            {// (There is no a gate lock)
+                // (Getting the value)
+                $response = $target->run();
+
+                if ( $response !== $target )
+                {// (There is no a middleware lock)
+                    if ( $response !== null )
+                    {// (Function returns something)
+                        // Printing the value
+                        echo json_encode( $response );
+                    }
+                }
+            }
+
+
+
+            // (Triggering the event)
+            App::trigger_event( 'end' );
+        }
+        catch (\Exception $e)
+        {
+            // (Getting the value)
+            $message = (string) $e;
+
+
+
+            // (Triggering the event)
+            App::trigger_event( 'error', [ 'message' => $message ] );
+
+
+
+            if ( App::$env->type === 'dev' )
+            {// Match OK
+                // Throwing an exception
+                throw $e;
+            }
+
+
+
+            // Returning the value
+            return false;
+        }
 
 
 

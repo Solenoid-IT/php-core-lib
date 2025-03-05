@@ -13,6 +13,10 @@ use \Solenoid\Core\Routing\Target;
 
 abstract class App
 {
+    private static array $events = [];
+
+
+
     public static string  $mode;
 
     public static string  $basedir;
@@ -105,6 +109,25 @@ abstract class App
     {
         // (Getting the value)
         self::$mode = self::fetch_mode();
+    }
+
+
+
+    # Returns [void]
+    public static function on (string $event_type, callable $function)
+    {
+        // (Getting the value)
+        self::$events[ $event_type ][] = $function;
+    }
+
+    # Returns [void]
+    public static function trigger_event (string $event_type, array $data = [])
+    {
+        foreach ( self::$events[ $event_type ] as $function )
+        {// Processing each entry
+            // (Calling the function)
+            $function( $data );
+        }
     }
 
 
