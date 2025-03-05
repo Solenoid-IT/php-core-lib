@@ -11,6 +11,7 @@ class Target
     private array $middlewares = [];
 
     private array $args = [];
+    private array $tags = [];
 
 
 
@@ -70,6 +71,8 @@ class Target
         return $this;
     }
 
+
+
     # Returns [self]
     public function set_args (array $value)
     {
@@ -80,6 +83,27 @@ class Target
 
         // Returning the value
         return $this;
+    }
+
+
+
+    # Returns [self]
+    public function add_tag (string $value)
+    {
+        // (Appending the value)
+        $this->tags[] = $value;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    # Returns [array<string>]
+    public function list_tags ()
+    {
+        // Returning the value
+        return $this->tags;
     }
 
 

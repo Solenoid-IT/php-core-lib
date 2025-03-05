@@ -77,6 +77,11 @@ class WebApp extends App
 
 
 
+        // (Getting the value)
+        App::$route_tags = $target->list_tags();
+
+
+
         try
         {
             // (Triggering the event)

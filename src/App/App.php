@@ -7,7 +7,6 @@ namespace Solenoid\Core\App;
 
 
 use \Solenoid\Core\Env;
-use \Solenoid\Core\Routing\Target;
 
 
 
@@ -25,7 +24,7 @@ abstract class App
     public static string  $timezone;
 
     public static ?Env    $env;
-    public static ?Target $target;
+    public static array   $route_tags;
 
 
 

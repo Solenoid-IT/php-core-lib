@@ -98,7 +98,7 @@ class Route
 
 
 
-    # Returns [void]
+    # Returns [self]
     public function via (array $middlewares)
     {
         foreach ( $middlewares as $middleware )
@@ -106,6 +106,28 @@ class Route
             // (Adding the middleware)
             self::$targets[ $this->id ][ $this->method ]->add_middleware( $middleware );
         }
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
+    # Returns [self]
+    public function tag (array $values)
+    {
+        foreach ( $values as $value )
+        {// Processing each entry
+            // (Adding the tag)
+            self::$targets[ $this->id ][ $this->method ]->add_tag( $value );
+        }
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
