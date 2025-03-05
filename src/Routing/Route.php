@@ -41,7 +41,7 @@ class Route
             [ $method, $id ] = explode( ' ', $route, 2 );
 
             // (Getting the value)
-            $route = new Route( $method, $id );
+            $route = new Route( $id, $method );
         }
         else
         {// Match failed
