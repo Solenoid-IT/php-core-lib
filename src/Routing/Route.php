@@ -76,8 +76,22 @@ class Route
     }
 
     # Returns [void]
-    public static function fallback (Target $target)
+    public static function fallback (callable|array|Target $target)
     {
+        if ( is_callable( $target ) )
+        {// Match OK
+            // (Getting the value)
+            $target = Target::define( $target );
+        }
+        else
+        if ( is_array( $target ) )
+        {// Match OK
+            // (Getting the value)
+            $target = Target::link( $target[0], $target[1] );
+        }
+
+
+
         // (Getting the value)
         self::$fallback_target = $target;
     }
