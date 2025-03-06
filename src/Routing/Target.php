@@ -149,8 +149,8 @@ class Target
         if ( isset( $this->class ) && isset( $this->fn ) )
         {// Match OK
             // (Getting the value)
-            #$response = call_user_func_array( [ ( new ( $this->class )() ), $this->fn ], $this->args );
-            $response = call_user_func_array( [ $this->class, $this->fn ], $this->args );
+            $response = call_user_func_array( [ ( new ( $this->class )() ), $this->fn ], $this->args );
+            #$response = call_user_func_array( [ $this->class, $this->fn ], $this->args );
         }
 
 
