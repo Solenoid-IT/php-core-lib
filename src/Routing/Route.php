@@ -17,17 +17,17 @@ class Route
 
 
 
-    public string $id;
     public string $method;
+    public string $id;
 
 
 
     # Returns [self]
-    public function __construct (string $id, string $method)
+    public function __construct (string $method, string $id)
     {
         // (Getting the values)
-        $this->id     = $id;
         $this->method = $method;
+        $this->id     = $id;
     }
 
 
@@ -41,7 +41,7 @@ class Route
             [ $method, $id ] = explode( ' ', $route, 2 );
 
             // (Getting the value)
-            $route = new Route( $id, $method );
+            $route = new Route( $method, $id );
         }
         else
         {// Match failed
