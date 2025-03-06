@@ -6,12 +6,14 @@ namespace Solenoid\Core\Task;
 
 
 
-use \Solenoid\Core\App\App;
+#use \Solenoid\Core\App\App;
 
 
 
 class Task
 {
+    /*
+
     public App $app;
 
 
@@ -22,6 +24,8 @@ class Task
         // (Getting the value)
         $this->app = &$app;
     }
+
+    */
 }
 
 
