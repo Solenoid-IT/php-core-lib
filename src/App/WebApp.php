@@ -42,7 +42,7 @@ class WebApp extends App
 
 
         // (Resolving the route)
-        $target = Route::resolve( $_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'] );
+        $target = Route::resolve( explode( '?', $_SERVER['REQUEST_URI'], 2 )[0], $_SERVER['REQUEST_METHOD'] );
 
         if ( $target === false )
         {// (Target not found)
